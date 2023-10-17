@@ -1,0 +1,28 @@
+---
+title: "Tidymodels"
+authors: "blabla "
+subtitle: "blabla"
+output: 
+  html_document:
+    toc: TRUE
+    df_print: paged
+    number_sections: FALSE
+    highlight: tango
+    theme: lumen
+    toc_depth: 3
+    toc_float: true
+    css: custom.css 
+    self_contained: false
+---
+
+This document is for the practical part of the workshop... blabla
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+Then blabla
+
+
+
+
