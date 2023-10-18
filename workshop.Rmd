@@ -21,7 +21,7 @@ This document is for the practical part of the workshop... blabla
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
-Then blabla
+Then blabla 1, 2, 3
 
 
 
