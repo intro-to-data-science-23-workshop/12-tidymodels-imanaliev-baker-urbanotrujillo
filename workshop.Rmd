@@ -194,6 +194,15 @@ recipe <- recipe(class ~ ., data = train_data) %>%
 ```
 
 ```{r}
+# Process the training and testing sets with the recipe
+train_processed <- bake(recipe, new_data = train_data)
+test_processed  <- bake(recipe, new_data = test_data)
+```
+
+
+
+
+```{r}
 str(heart)
 ```
 
