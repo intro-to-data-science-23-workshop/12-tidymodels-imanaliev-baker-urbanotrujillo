@@ -114,7 +114,14 @@ library(dplyr)
 library(ggplot2)
 library(rsample)
 library(recipes)
-library(crimedata)
+library(parsnip)
+library(workflows)
+library(tune)
+library(broom)
+library(yardstick)
+library(tune)
+library(dials)
+
 ```
 
 Load the dataset and view the first rows. In this case we will use the dataset "blabla" which blabla.
