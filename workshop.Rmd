@@ -179,7 +179,20 @@ train_data <- training(data_split)
 test_data  <- testing(data_split)
 ```
 
+```{r}
+# Set up the enhanced recipe for preprocessing
+recipe <- recipe(class ~ ., data = train_data) %>% 
+  step_impute_median(all_numeric(), -all_outcomes()) %>% 
+  step_unknown(all_nominal(), -all_outcomes()) %>%
+  step_dummy(all_nominal(), -all_outcomes()) %>%
+  step_zv(all_predictors()) %>%
+  step_normalize(all_numeric(), -all_outcomes()) %>%
+  prep()
+```
 
+```{r}
+str(heart)
+```
 
 
 
