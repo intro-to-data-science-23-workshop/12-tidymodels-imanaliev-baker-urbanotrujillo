@@ -86,14 +86,23 @@ A list of all tidymodels functions across different CRAN packages can be found a
 
 # Tidymodels workflow 
 
-a. Pre-processing (rsample, recipes) 
-blabla
+a. Pre-processing
+Pre-processing involves preparing the data for modeling. This includes tasks such as data splitting, feature engineering, and data transformation. Some useful steps include:
+* Data splitting with rsample: Use rsample to split your dataset into training, validation, and test sets. This is crucial for assessing and tuning your models.
+* Feature engineering with recipes: Create a recipe that specifies how to pre-process your data, including steps like data normalization, one-hot encoding, and handling missing values.
 
-b. Modelling (parsnip, broom, workflows) 
-blabla
+b. Modelling
+The modeling stage involves building and tuning machine learning models using a consistent and user-friendly interface.
+Some useful steps include:
+* Model specification with parsnip: Use parsnip to specify the type of model and its hyperparameters.
+* Model fitting with workflows: Create a workflow that combines data pre-processing (from the recipe) and model specification. Fit the workflow to your training data.
+* Tuning with tune: Utilize tune to perform hyperparameter tuning, search for the best model configuration, and optimize model performance.
+* Evaluation with broom: Use broom to tidy up model results, making them easier to interpret and visualize.
 
-c. Post-processing (yardstick, tune, dials) 
-blabla
+c. Post-processing
+Post-processing involves evaluating the model's performance, selecting the best model configuration, and fine-tuning hyperparameters. Some useful steps include:
+* Model Evaluation with yardstick: Use yardstick to calculate evaluation metrics like RMSE, MAE, or ROC AUC.
+* Hyperparameter Tuning with tune and dials: Fine-tune model hyperparameters to optimize performance based on evaluation metrics.
 
 # Example
 Now we are going to do a practical exercise to show how to use the tidymodels package:

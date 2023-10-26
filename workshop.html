@@ -435,8 +435,8 @@ inferences, or making predictions for decision-making.</p>
 <div id="some-functions-of-tidymodels" class="section level1">
 <h1>Some functions of tidymodels</h1>
 <ul>
-<li>broom: takes the messy output of built-in functions in R, such
-as lm, nls, or t.test, and turns them into tidy data frames.</li>
+<li>broom: takes the messy output of built-in functions in R, such as
+lm, nls, or t.test, and turns them into tidy data frames.</li>
 <li>dials: has tools to create and manage values of tuning
 parameters.</li>
 <li>dplyr: contains a grammar for data manipulation.</li>
@@ -464,10 +464,47 @@ class="uri">https://www.tidymodels.org/find/</a></p>
 <div id="tidymodels-workflow" class="section level1">
 <h1>Tidymodels workflow</h1>
 <ol style="list-style-type: lower-alpha">
-<li><p>Pre-processing (rsample, recipes) blabla</p></li>
-<li><p>Modelling (parsnip, broom, workflows) blabla</p></li>
-<li><p>Post-processing (yardstick, tune, dials) blabla</p></li>
+<li>Pre-processing Pre-processing involves preparing the data for
+modeling. This includes tasks such as data splitting, feature
+engineering, and data transformation. Some useful steps include:</li>
 </ol>
+<ul>
+<li>Data splitting with rsample: Use rsample to split your dataset into
+training, validation, and test sets. This is crucial for assessing and
+tuning your models.</li>
+<li>Feature engineering with recipes: Create a recipe that specifies how
+to pre-process your data, including steps like data normalization,
+one-hot encoding, and handling missing values.</li>
+</ul>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Modelling The modeling stage involves building and tuning machine
+learning models using a consistent and user-friendly interface. Some
+useful steps include:</li>
+</ol>
+<ul>
+<li>Model specification with parsnip: Use parsnip to specify the type of
+model and its hyperparameters.</li>
+<li>Model fitting with workflows: Create a workflow that combines data
+pre-processing (from the recipe) and model specification. Fit the
+workflow to your training data.</li>
+<li>Tuning with tune: Utilize tune to perform hyperparameter tuning,
+search for the best model configuration, and optimize model
+performance.</li>
+<li>Evaluation with broom: Use broom to tidy up model results, making
+them easier to interpret and visualize.</li>
+</ul>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Post-processing Post-processing involves evaluating the model’s
+performance, selecting the best model configuration, and fine-tuning
+hyperparameters. Some useful steps include:</li>
+</ol>
+<ul>
+<li>Model Evaluation with yardstick: Use yardstick to calculate
+evaluation metrics like RMSE, MAE, or ROC AUC.</li>
+<li>Hyperparameter Tuning with tune and dials: Fine-tune model
+hyperparameters to optimize performance based on evaluation
+metrics.</li>
+</ul>
 </div>
 <div id="example" class="section level1">
 <h1>Example</h1>
@@ -476,7 +513,9 @@ tidymodels package:</p>
 <p>Define the libraries to use: (PLEASE ADD ALL OF THEM HERE!)</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">library</span>(rsample)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">library</span>(recipes)</span></code></pre></div>
 <p>Load the dataset and view the first rows. In this case we will use
 the dataset “blabla” which blabla.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">data</span>(mtcars)</span>
