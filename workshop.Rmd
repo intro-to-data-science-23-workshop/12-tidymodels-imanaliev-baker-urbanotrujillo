@@ -55,7 +55,7 @@ According to Wickham and Grolemund (2016) the following figure illustrates the g
 ```{r, fig.align='center', echo=F, out.width = "90%"}
 knitr::include_graphics("pics/data_process.png")
 ```
-# Types of models 
+# Types of models
 
 * Descriptive Models: these aim to summarize and describe data to gain insights into its characteristics. They are used for exploratory data analysis (EDA) and data visualization to understand the underlying patterns, relationships, and distributions in the data.Examples: Histograms, bar charts, scatter plots, summary statistics (mean, median, standard deviation), and data tables are common tools used for descriptive modeling.
 
@@ -138,30 +138,39 @@ Check summary statistics of the dataset
 summary(data)
 ```
 
-Create model where the dependent variable is having a heart disease and the independent variables are age, sex, Resting blood pressure in mm Hg, Serum cholesterol in mg/dl, Fasting blood sugar more than 120 mg/dl and Maximum heart rate achieved.
+Create diffent models for the dependent variable "heart disease":
 ```{r}
 # create variable of heart disease
 data <- data %>%
   mutate(heart_disease = ifelse(class %in% c(1, 2, 3, 4), 1, 0))
 
-# create linear regression model
-model <- lm(heart_disease ~ age + sex + trestbps + chol + fbs + thalach, data = data)
+data$sex <- as.integer(data$sex)
+data$fbs <- as.integer(data$fbs)
 
-# check model results
-summary(model)
+# create linear regression models
+
+# model 1
+model_1 <- glm(heart_disease ~ age + sex + trestbps + chol + fbs + thalach, data = data, family = binomial)
+summary(model_1)
+
+# model 2
+
+
+
+
 ```
 
 Confidence interval for the coefficient
 ```{r}
-confint(lm_model)
+confint(model)
 ```
 
 Let's create a scatterplot to visualize the relationship between mpg and horsepower.
 ```{r}
-ggplot(mtcars, aes(x = hp, y = mpg)) +
+ggplot(data, aes(x = age, y = heart_disease)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE, color = "blue") +
-  labs(title = "Scatterplot of mpg vs. Horsepower", x = "Horsepower", y = "Miles per Gallon")
+  labs(title = "-", x = "Age", y = "Heart Disease")
 ```
 
 Anova table for the model
