@@ -221,6 +221,20 @@ train_processed <- bake(recipe, new_data = train_data)
 test_processed  <- bake(recipe, new_data = test_data)
 ```
 
+```{r}
+#Creating a workflow 
+
+lm_spec <- linear_reg() %>%
+  set_engine("lm")
+
+wflow <- workflow() %>% 
+  add_recipe(recipe) %>%
+  add_model(lm_spec)
+
+```
+```{r}
+
+```
 
 
 
