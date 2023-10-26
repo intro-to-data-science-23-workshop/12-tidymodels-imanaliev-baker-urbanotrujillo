@@ -46,6 +46,13 @@ Tidymodels offers several advantages that may make it a suitable choice for many
 * Reproducibility and Documentation: Tidymodels emphasizes good practices for reproducibility, making it easier to document and share your modeling workflows with colleagues.
 * Active Development: Tidymodels is actively maintained and updated, ensuring that it stays relevant and up-to-date with the latest developments in the field of machine learning.
 
+# How does modeling fit into the data analysis process? 
+According to Wickham and Grolemund (2016) the following figure illustrates the general data analysis process. Data ingestion and cleaning/tidying are shown as the initial steps. When the analytical steps for understanding commence, they are a heuristic process; we cannot pre-determine how long they may take. The cycle of transformation, modeling, and visualization often requires multiple iterations.
+
+```{r, fig.align='center', echo=F, out.width = "90%"}
+knitr::include_graphics("pics/data_process.png")
+```
+
 ```{r}
 
 ```
