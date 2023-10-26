@@ -126,7 +126,7 @@ library(lubridate)
 library(kmed)
 ```
 
-Load the dataset and view the first rows. In this case we will use the dataset "blabla" which blabla. Metadata can be found in: https://search.r-project.org/CRAN/refmans/kmed/html/heart.html 
+Load the dataset and view the first rows. In this case we will use the dataset heart from the kmed package which contains 14 variables of 297 patients for their heart disease diagnosis. Metadata can be found in: https://search.r-project.org/CRAN/refmans/kmed/html/heart.html
 ```{r}
 library("kmed")
 data <- heart
@@ -138,44 +138,28 @@ Check summary statistics of the dataset
 summary(data)
 ```
 
-Create diffent models for the dependent variable "heart disease":
+integrate this in recipe:
 ```{r}
 # create variable of heart disease
 data <- data %>%
   mutate(heart_disease = ifelse(class %in% c(1, 2, 3, 4), 1, 0))
 
-data$sex <- as.integer(data$sex)
-data$fbs <- as.integer(data$fbs)
+data$heart_disease <- as.factor(data$heart_disease)
+data$sex <- as.factor(data$sex)
+data$fbs <- as.factor(data$fbs)
 
-# create linear regression models
+# create categorical variable for age
+data <- data %>%
+  mutate(age_group = case_when(
+    age < 40 ~ "Young adult",
+    age >= 40 & age < 60 ~ "Adult",
+    age >= 60 ~ "Senior"
+  ))
 
-# model 1
-model_1 <- glm(heart_disease ~ age + sex + trestbps + chol + fbs + thalach, data = data, family = binomial)
-summary(model_1)
-
-# model 2
+data$age_group <- as.factor(data$age_group)
 
 
 
-
-```
-
-Confidence interval for the coefficient
-```{r}
-confint(model)
-```
-
-Let's create a scatterplot to visualize the relationship between mpg and horsepower.
-```{r}
-ggplot(data, aes(x = age, y = heart_disease)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE, color = "blue") +
-  labs(title = "-", x = "Age", y = "Heart Disease")
-```
-
-Anova table for the model
-```{r}
-anova(lm_model)
 ```
 
 ```{r}
@@ -212,11 +196,11 @@ test_processed  <- bake(recipe, new_data = test_data)
 #Creating a workflow 
 
 lm_spec <- linear_reg() %>%
-  set_engine("lm")
+  set_engine("glm")
 
 wflow <- workflow() %>% 
   add_recipe(recipe) %>%
-  add_model(lm_spec)
+  add_model(glm_spec)
 
 ```
 ```{r}
@@ -225,13 +209,48 @@ wflow <- workflow() %>%
 
 
 
-```{r}
 
+
+
+
+
+Create different models for the dependent variable "heart disease":
+```{r}
+HEAD
+
+
+# create linear regression models
+
+# model 1
+model_1 <- glm(heart_disease == 1 ~ age + sex + trestbps + chol + fbs + thalach, data = data, family = binomial)
+summary(model_1)
+
+# model 2
+model_2 <- glm(heart_disease ==1  ~ age + sex + trestbps + chol + fbs + thalach + sex*age_group, data = data, family = binomial)
+summary(model_2)
+
+# model 3
 ```
 
 
+Confidence interval for the coefficient
+```{r}
+confint(model)
+```
 
+Let's create a scatterplot to visualize the relationship between mpg and horsepower.
+```{r}
+ggplot(data, aes(x = age, y = heart_disease)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  labs(title = "-", x = "Age", y = "Heart Disease")
+```
 
+Anova table for the model
+```{r}
+anova(lm_model)
+
+```
 
 
 
