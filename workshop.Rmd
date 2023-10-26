@@ -84,30 +84,62 @@ In summary, descriptive models help summarize and visualize data, inferential mo
 
 A list of all tidymodels functions across different CRAN packages can be found at https://www.tidymodels.org/find/ 
 
+# Tidymodels workflow 
 
+a. Pre-processing (rsample, recipes) 
+blabla
 
-Libraries to use in this exercise: (PLEASE ADD ALL OF THEM HERE!)
+b. Modelling (parsnip, broom, workflows) 
+blabla
+
+c. Post-processing (yardstick, tune, dials) 
+blabla
+
+# Example
+Now we are going to do a practical exercise to show how to use the tidymodels package:
+
+Define the libraries to use: (PLEASE ADD ALL OF THEM HERE!)
 ```{r, include = T}
 library(tidymodels)
 library(dplyr)
+library(ggplot2)
 ```
 
-
+Load the dataset and view the first rows. In this case we will use the dataset "blabla" which blabla.
 ```{r}
-
+data(mtcars)
+head(mtcars)
 ```
 
-
+Check summary statistics for mpg and horsepower
 ```{r}
-
+summary(mtcars$mpg)
+summary(mtcars$hp)
 ```
 
+Create a linear regression model
+```{r}
+lm_model <- lm(mpg ~ hp, data = mtcars)
+summary(lm_model)
+```
 
+Confidence interval for the coefficient
+```{r}
+confint(lm_model)
+```
 
+Let's create a scatterplot to visualize the relationship between mpg and horsepower.
+```{r}
+ggplot(mtcars, aes(x = hp, y = mpg)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  labs(title = "Scatterplot of mpg vs. Horsepower", x = "Horsepower", y = "Miles per Gallon")
+```
 
-
-
-
+Anova table for the model
+```{r}
+anova(lm_model)
+```
 
 
 
