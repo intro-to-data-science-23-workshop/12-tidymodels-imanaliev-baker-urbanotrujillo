@@ -126,7 +126,7 @@ library(lubridate)
 library(kmed)
 ```
 
-Load the dataset and view the first rows. In this case we will use the dataset "blabla" which blabla. Metadata can be found in: 
+Load the dataset and view the first rows. In this case we will use the dataset "blabla" which blabla. Metadata can be found in: https://search.r-project.org/CRAN/refmans/kmed/html/heart.html 
 ```{r}
 library("kmed")
 data <- heart
@@ -135,17 +135,20 @@ head(data)
 
 Check summary statistics of the dataset
 ```{r}
-summary(heart)
+summary(data)
 ```
 
-Create a linear regression model
+Create model
 ```{r}
-#create variable of heart disease
+# create variable of heart disease
 data <- data %>%
   mutate(heart_disease = ifelse(class %in% c(1, 2, 3, 4), 1, 0))
 
-model <- lm(y ~ x, data = heart)
-summary(lm_model)
+# create linear regression model
+model <- lm(heart_disease ~ age + sex + trestbps + chol + fbs + thalach, data = data)
+
+# check model results
+summary(model)
 ```
 
 Confidence interval for the coefficient
