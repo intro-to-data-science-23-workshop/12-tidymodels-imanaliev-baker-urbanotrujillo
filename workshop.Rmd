@@ -133,8 +133,7 @@ head(nycvehiclethefts)
 
 Check summary statistics for mpg and horsepower
 ```{r}
-summary(mtcars$mpg)
-summary(mtcars$hp)
+summary(nycvehiclethefts)
 ```
 
 Create a linear regression model
