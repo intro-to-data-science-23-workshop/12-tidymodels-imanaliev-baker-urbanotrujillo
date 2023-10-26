@@ -125,10 +125,11 @@ library(dials)
 library(lubridate)
 ```
 
-Load the dataset and view the first rows. In this case we will use the dataset "blabla" which blabla.
+Load the dataset and view the first rows. In this case we will use the dataset "blabla" which blabla. Metadata can be found in: 
 ```{r}
 library("kmed")
 data <- heart
+head(data)
 ```
 
 Check summary statistics of the dataset
@@ -138,7 +139,11 @@ summary(heart)
 
 Create a linear regression model
 ```{r}
-lm_model <- lm(mpg ~ hp, data = mtcars)
+#create variable of heart disease
+data <- data %>%
+  mutate(heart_disease = ifelse(class %in% c(1, 2, 3, 4), 1, 0))
+
+model <- lm(y ~ x, data = heart)
 summary(lm_model)
 ```
 
