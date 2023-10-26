@@ -1,7 +1,6 @@
 ---
-title: "Tidymodels"
-authors: "blabla "
-subtitle: "blabla "
+title: "I2DS Tools for Data Science Workshop 2023: Tidy modeling with tidymodels in R"
+authors: "Daniyar Imanaliev, Henry Baker, Isabella Urbano Trujillo"
 output: 
   html_document:
     toc: TRUE
@@ -15,14 +14,28 @@ output:
     self_contained: false
 ---
 
-This document is for the practical part of the workshop... blabla
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      eval = TRUE,
+                      error = FALSE,
+                      message = FALSE,
+                      warning = FALSE,
+                      comment = NA)
 ```
 
-Then blabla 1, 2, 3
+# What is tidymodels?
+Tidymodels is a collection of R packages and a framework for modeling and machine learning that follows the principles of tidy data and integrates seamlessly with the tidyverse ecosystem. It was developed to provide a consistent and organized way to perform machine learning tasks in R, making it easier for data scientists and analysts to build, evaluate, and deploy predictive models.
+
+Install tidymodels with:
+```{r, include = T}
+# install.packages("tidymodels")
+library(tidymodels)
+```
+
+# Why tidymodels and not other R package?
 
 
+```{r}
 
+```
 
