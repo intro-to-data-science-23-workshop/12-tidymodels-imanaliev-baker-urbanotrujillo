@@ -1,0 +1,111 @@
+---
+title: "To Tidymodel or not to Tidymodel, that this the question"
+subtitle: "Workshop: How to get the most out of Tidymodeling with R"
+author: "Henry Baker, add group"
+date: "`r Sys.Date()`" 
+output: 
+  ioslides_presentation:
+    widescreen: true
+    smaller: true
+    css: styles.css 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(lattice)
+library(ggplot2)
+```
+
+---
+
+## Table of Contents
+
+1. What is Tidymodeling?(#what_is)
+2. Why Tidymodeling? Some motivations
+3. Key concepts in Tidymodeling
+4. What we are NOT covering
+5. Workshop focus: Recipes & iterative pre-processing
+6. Modeling
+
+
+
+
+
+## Remember this?
+
+```{r, echo=FALSE}
+# non-visible 
+set.seed(123) 
+
+synthetic_data <- data.frame(
+  predictor1 = rnorm(100),  
+  predictor2 = rnorm(100),  
+  predictor3 = rnorm(100),  
+  control1 = sample(c("Yes", "No"), 100, replace = TRUE), 
+  control2 = runif(100), 
+  outcome = rnorm(100)  
+)
+
+synthetic_data$outcome <- with(synthetic_data, predictor1 + 2*predictor2 + rnorm(100))
+
+```
+
+```{r}
+model <- lm(outcome ~ predictor1 + predictor2 + predictor3 + control1 + control2, data=synthetic_data)
+summary(model)
+
+
+- Base R equivalent: ‘R formula’
+
+
+---
+
+# R’s strength is also its greatest weakness…
+
+One of the strengths of R is that it encourages developers to create a user interface that fits their needs. As an example, here are three common methods for creating a scatter plot of two numeric variables in a data frame called `plot_data`:
+
+
+# Different Plotting Methods in R
+<!-- This slide will lead into the examples. It's clean and gives a clear signal that we're about to dive into specifics. -->
+# using Base R plot
+```{r}
+#plot(synthetic_data$x, synthetic_data$y, main="Base R Plot", pch=19, col=rgb(0.2,0.4,0.6,0.6))
+```
+--
+## Using Lattice 
+```{r}
+#print(synthetic_data(y ~ x, data = plot_data, main="Lattice Plot"))
+```
+--
+## Using ggplot2
+```{r}
+#ggplot(synthetic_data, aes(x = x, y = y)) + geom_point()
+```
+---
+
+In these three cases, separate groups of developers devised three distinct interfaces for the same task. Each has advantages and disadvantages.
+
+In comparison, the Python Developer’s Guide espouses the notion that, when approaching a problem:
+“There should be one – and preferably only one – obvious way to do it.”
+
+---
+# A little motivation: why Tidymodels?
+
+Just as tidyverse syntax makes our lives a whole load easier / intuitive than using base R expressions….
+
+- **Tidyverse integration**: Built on the principles of the tidyverse, promoting consistent and user-friendly data manipulation. Familiarity with the tidyverse makes using Tidymodels seamless and consistent in data analysis and modeling workflows.
+
+- **Consistency & workflow**: Tidymodels ensures a structured workflow for modeling, encapsulating data pre-processing, model specification, tuning, and evaluation, enhancing organization and transparency.
+
+- **Recipes for data pre-processing**: The inclusion of the `recipes` package in Tidymodels allows structured, reproducible data pre-processing steps, beneficial for feature engineering and data transformation.
+
+- **Model Agnosticism**: Facilitates easy swapping of different models for experimentation and selection without extensive code adjustments.
+
+- **Hyperparameter Tuning**: Streamlined process for adjusting and finding the best model parameters.
+
+- **Resampling & Cross-validation**: Offers resampling methods, like cross-validation and bootstrapping, essential for reliable estimations of model generalization.
+
+- **Extensive metrics**: The `yardstick` package in Tidymodels provides a broad spectrum of evaluation metrics, simplifying model performance comparison and assessment.
+---
+
