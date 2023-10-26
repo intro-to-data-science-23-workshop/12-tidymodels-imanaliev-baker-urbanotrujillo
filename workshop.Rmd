@@ -12,7 +12,6 @@ output:
     toc_float: true
     css: custom.css 
     self_contained: false
-    
 ---
 
 ```{r, include=FALSE}
@@ -53,8 +52,9 @@ Tidymodels offers several advantages that may make it a suitable choice for many
 According to Wickham and Grolemund (2016) the following figure illustrates the general data analysis process. Data ingestion and cleaning/tidying are shown as the initial steps. When the analytical steps for understanding commence, they are a heuristic process; we cannot pre-determine how long they may take. The cycle of transformation, modeling, and visualization often requires multiple iterations.
 
 ```{r, fig.align='center', echo=F, out.width = "90%"}
-knitr::include_graphics("pics/data_process.png")
+knitr::include_graphics("pics/data_process.png") 
 ```
+
 # Types of models
 
 * Descriptive Models: these aim to summarize and describe data to gain insights into its characteristics. They are used for exploratory data analysis (EDA) and data visualization to understand the underlying patterns, relationships, and distributions in the data.Examples: Histograms, bar charts, scatter plots, summary statistics (mean, median, standard deviation), and data tables are common tools used for descriptive modeling.
@@ -216,9 +216,6 @@ wflow <- workflow() %>%
 
 Create different models for the dependent variable "heart disease":
 ```{r}
-HEAD
-
-
 # create linear regression models
 
 # model 1
@@ -251,9 +248,6 @@ Anova table for the model
 anova(lm_model)
 
 ```
-
-
-
 
 
 
