@@ -25,13 +25,13 @@ library(dplyr)
 <center>
 
 
-# *"To Tidymodel or not to Tidymodel, that this the question..."* <!-- .element: class="fragment" data-fragment-index="1" -->
+# *"To Tidymodel or not to Tidymodel, that is the question..."* <!-- .element: class="fragment" data-fragment-index="1" -->
 
 # - Hadley Wickam (probably) <!-- .element: class="fragment" data-fragment-index="2" -->
 
 ---
 
-### Presented by Henry Baker
+### Presented by Henry Baker, Isabella, add others
 ### ADD GROUP <!-- .element: class="fragment" data-fragment-index="3" -->
 ### October 2, 2023
 
