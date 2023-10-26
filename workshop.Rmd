@@ -138,7 +138,7 @@ Check summary statistics of the dataset
 summary(data)
 ```
 
-Create model
+Create model where the dependent variable is having a heart disease and the independent variables are age, sex, Resting blood pressure in mm Hg, Serum cholesterol in mg/dl, Fasting blood sugar more than 120 mg/dl and Maximum heart rate achieved.
 ```{r}
 # create variable of heart disease
 data <- data %>%
