@@ -127,8 +127,8 @@ library(lubridate)
 
 Load the dataset and view the first rows. In this case we will use the dataset "blabla" which blabla.
 ```{r}
-data(mtcars)
-head(mtcars)
+data("nycvehiclethefts")
+head(nycvehiclethefts)
 ```
 
 Check summary statistics for mpg and horsepower
