@@ -109,6 +109,7 @@ Now we are going to do a practical exercise to show how to use the tidymodels pa
 
 Define the libraries to use: (PLEASE ADD ALL OF THEM HERE!)
 ```{r, include = T}
+# install.packages("kmed")
 library(tidymodels)
 library(dplyr)
 library(ggplot2)
@@ -121,19 +122,18 @@ library(broom)
 library(yardstick)
 library(tune)
 library(dials)
-library(crimedata)
 library(lubridate)
 ```
 
 Load the dataset and view the first rows. In this case we will use the dataset "blabla" which blabla.
 ```{r}
-data("nycvehiclethefts")
-head(nycvehiclethefts)
+library("kmed")
+data <- heart
 ```
 
-Check summary statistics for mpg and horsepower
+Check summary statistics of the dataset
 ```{r}
-summary(nycvehiclethefts)
+summary(heart)
 ```
 
 Create a linear regression model
