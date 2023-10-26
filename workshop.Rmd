@@ -226,7 +226,7 @@ wflow <- workflow() %>%
 
 
 ```{r}
-str(heart)
+
 ```
 
 
