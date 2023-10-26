@@ -103,6 +103,8 @@ Define the libraries to use: (PLEASE ADD ALL OF THEM HERE!)
 library(tidymodels)
 library(dplyr)
 library(ggplot2)
+library(rsample)
+library(recipes)
 ```
 
 Load the dataset and view the first rows. In this case we will use the dataset "blabla" which blabla.
