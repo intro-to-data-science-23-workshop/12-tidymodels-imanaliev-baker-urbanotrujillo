@@ -121,8 +121,8 @@ library(broom)
 library(yardstick)
 library(tune)
 library(dials)
-library(crimedata)
 library(lubridate)
+library(kmed)
 ```
 
 Load the dataset and view the first rows. In this case we will use the dataset "blabla" which blabla.
