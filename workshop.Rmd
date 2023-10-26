@@ -166,6 +166,20 @@ Anova table for the model
 anova(lm_model)
 ```
 
+```{r}
+#Ensure the response variable is a factor for classification tasks
+data$class <- as.factor(data$class)
+```
+
+```{r}
+# Split the data into training (75%) and testing (25%) sets
+set.seed(123) # for reproducibility
+data_split <- initial_split(data, prop = 0.75)
+train_data <- training(data_split)
+test_data  <- testing(data_split)
+```
+
+
 
 
 
