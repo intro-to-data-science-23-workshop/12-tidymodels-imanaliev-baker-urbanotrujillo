@@ -121,6 +121,7 @@ library(broom)
 library(yardstick)
 library(tune)
 library(dials)
+library(crimedata)
 
 ```
 
