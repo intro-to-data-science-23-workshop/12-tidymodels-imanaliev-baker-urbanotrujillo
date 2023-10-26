@@ -54,6 +54,7 @@ According to Wickham and Grolemund (2016) the following figure illustrates the g
 ```{r, fig.align='center', echo=F, out.width = "90%"}
 knitr::include_graphics("pics/data_process.png") 
 ```
+
 # Types of models
 
 * Descriptive Models: these aim to summarize and describe data to gain insights into its characteristics. They are used for exploratory data analysis (EDA) and data visualization to understand the underlying patterns, relationships, and distributions in the data.Examples: Histograms, bar charts, scatter plots, summary statistics (mean, median, standard deviation), and data tables are common tools used for descriptive modeling.
@@ -247,9 +248,6 @@ Anova table for the model
 anova(lm_model)
 
 ```
-
-
-
 
 
 
