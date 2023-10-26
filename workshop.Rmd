@@ -109,13 +109,13 @@ Now we are going to do a practical exercise to show how to use the tidymodels pa
 
 Define the libraries to use: (PLEASE ADD ALL OF THEM HERE!)
 ```{r, include = T}
-# install.packages("kmed")
 library(tidymodels)
 library(dplyr)
 library(ggplot2)
 library(rsample)
 library(recipes)
 library(parsnip)
+library(dotwhisker)
 library(workflows)
 library(tune)
 library(broom)
@@ -123,12 +123,11 @@ library(yardstick)
 library(tune)
 library(dials)
 library(lubridate)
-library(kmed)
 ```
 
 Load the dataset and view the first rows. In this case we will use the dataset heart from the kmed package which contains 14 variables of 297 patients for their heart disease diagnosis. Metadata can be found in: https://search.r-project.org/CRAN/refmans/kmed/html/heart.html
 ```{r}
-library("kmed")
+library(kmed)
 data <- heart
 head(data)
 ```
@@ -138,7 +137,7 @@ Check summary statistics of the dataset
 summary(data)
 ```
 
-integrate this in recipe:
+ ## PLEASE INTEGRATE THIS STEPS IN RECEPIE ##
 ```{r}
 # create variable of heart disease
 data <- data %>%
@@ -157,26 +156,22 @@ data <- data %>%
   ))
 
 data$age_group <- as.factor(data$age_group)
-
-
-
 ```
 
 ```{r}
-#Ensure the response variable is a factor for classification tasks
-data$class <- as.factor(data$class)
+# data$class <- as.factor(data$class) OUR DEPENDENT VAR IS heart_disease
 ```
 
+Split the data into training (75%) and testing (25%) sets:
 ```{r}
-# Split the data into training (75%) and testing (25%) sets
 set.seed(123) # for reproducibility
 data_split <- initial_split(data, prop = 0.75)
 train_data <- training(data_split)
 test_data  <- testing(data_split)
 ```
 
+Set up the enhanced recipe for preprocessing:
 ```{r}
-# Set up the enhanced recipe for preprocessing
 recipe <- recipe(class ~ ., data = train_data) %>% 
   step_impute_median(all_numeric(), -all_outcomes()) %>% 
   step_unknown(all_nominal(), -all_outcomes()) %>%
@@ -186,25 +181,20 @@ recipe <- recipe(class ~ ., data = train_data) %>%
   prep()
 ```
 
+Process the training and testing sets with the recipe:
 ```{r}
-# Process the training and testing sets with the recipe
 train_processed <- bake(recipe, new_data = train_data)
 test_processed  <- bake(recipe, new_data = test_data)
 ```
 
-```{r}
 #Creating a workflow 
-
+```{r}
 lm_spec <- linear_reg() %>%
   set_engine("glm")
 
 wflow <- workflow() %>% 
   add_recipe(recipe) %>%
   add_model(glm_spec)
-
-```
-```{r}
-
 ```
 
 
