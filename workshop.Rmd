@@ -68,7 +68,7 @@ In summary, descriptive models help summarize and visualize data, inferential mo
 
 # Some functions of tidymodels
 
-* broom: takes the messy output of built-in functions in R, such as lm, nls, or t.test, and turns them into tidy data frames.
+* broom: takes the messy output of built-in functions in R, such as lm, nls, or t.test, and turns them into tidy data frames.
 * dials: has tools to create and manage values of tuning parameters. 
 * dplyr: contains a grammar for data manipulation. 
 * ggplot2: implements a grammar of graphics. 
