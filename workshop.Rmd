@@ -31,7 +31,6 @@ Tidymodels is a collection of R packages and a framework for modeling and machin
 Install tidymodels with:
 ```{r, include = T}
 # install.packages("tidymodels")
-library(tidymodels)
 ```
 
 # Why tidymodels and not other R package?
@@ -56,7 +55,7 @@ According to Wickham and Grolemund (2016) the following figure illustrates the g
 ```{r, fig.align='center', echo=F, out.width = "90%"}
 knitr::include_graphics("pics/data_process.png")
 ```
-# Types of models
+# Types of models 
 
 * Descriptive Models: these aim to summarize and describe data to gain insights into its characteristics. They are used for exploratory data analysis (EDA) and data visualization to understand the underlying patterns, relationships, and distributions in the data.Examples: Histograms, bar charts, scatter plots, summary statistics (mean, median, standard deviation), and data tables are common tools used for descriptive modeling.
 
@@ -67,8 +66,30 @@ Examples: Linear regression, decision trees, random forests, neural networks, an
 
 In summary, descriptive models help summarize and visualize data, inferential models draw conclusions about populations, and predictive models make future predictions based on historical data. The choice of model depends on your specific goals and the type of analysis you need to perform, whether it's for understanding data, drawing statistical inferences, or making predictions for decision-making.
 
-```{r}
+# Some functions of tidymodels
 
+* broom: takes the messy output of built-in functions in R, such as lm, nls, or t.test, and turns them into tidy data frames.
+* dials: has tools to create and manage values of tuning parameters. 
+* dplyr: contains a grammar for data manipulation. 
+* ggplot2: implements a grammar of graphics. 
+* infer: is a modern approach to statistical inference. 
+* parsnip: is a tidy, unified interface to creating models. 
+* purrr: is a functional programming toolkit. 
+* recipe: is a general data preprocessor with a modern interface. It can create model matrices that incorporate feature engineering, imputation, and other help tools. 
+* rsample: has infrastructure for resampling data so that models can be assessed and empirically validated.
+* tibble: has a modern re-imagining of the data frame. 
+* tune: contains the functions to optimize model hyper-parameters. 
+* workflows: has methods to combine pre-processing steps and models into a single object. 
+* yardstick: contains tools for evaluating models (e.g.accuracy, RMSE, etc.). 
+
+A list of all tidymodels functions across different CRAN packages can be found at https://www.tidymodels.org/find/ 
+
+
+
+Libraries to use in this exercise: (PLEASE ADD ALL OF THEM HERE!)
+```{r, include = T}
+library(tidymodels)
+library(dplyr)
 ```
 
 

@@ -343,8 +343,7 @@ provide a consistent and organized way to perform machine learning tasks
 in R, making it easier for data scientists and analysts to build,
 evaluate, and deploy predictive models.</p>
 <p>Install tidymodels with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># install.packages(&quot;tidymodels&quot;)</span></span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># install.packages(&quot;tidymodels&quot;)</span></span></code></pre></div>
 </div>
 <div id="why-tidymodels-and-not-other-r-package" class="section level1">
 <h1>Why tidymodels and not other R package?</h1>
@@ -389,6 +388,81 @@ your modeling workflows with colleagues.</li>
 ensuring that it stays relevant and up-to-date with the latest
 developments in the field of machine learning.</li>
 </ul>
+</div>
+<div id="how-does-modeling-fit-into-the-data-analysis-process"
+class="section level1">
+<h1>How does modeling fit into the data analysis process?</h1>
+<p>According to Wickham and Grolemund (2016) the following figure
+illustrates the general data analysis process. Data ingestion and
+cleaning/tidying are shown as the initial steps. When the analytical
+steps for understanding commence, they are a heuristic process; we
+cannot pre-determine how long they may take. The cycle of
+transformation, modeling, and visualization often requires multiple
+iterations.</p>
+<p><img src="pics/data_process.png" width="90%" style="display: block; margin: auto;" />
+# Types of models</p>
+<ul>
+<li><p>Descriptive Models: these aim to summarize and describe data to
+gain insights into its characteristics. They are used for exploratory
+data analysis (EDA) and data visualization to understand the underlying
+patterns, relationships, and distributions in the data.Examples:
+Histograms, bar charts, scatter plots, summary statistics (mean, median,
+standard deviation), and data tables are common tools used for
+descriptive modeling.</p></li>
+<li><p>Inferential Models: these are used to draw conclusions or make
+inferences about a population based on a sample of data.They are
+employed in hypothesis testing and statistical analysis to determine
+whether observed effects are statistically significant and can be
+generalized to the larger population. Examples: T-tests, ANOVA,
+regression analysis, and chi-squared tests are commonly used inferential
+models.</p></li>
+<li><p>Predictive Models: these are designed to make predictions about
+future or unseen data based on patterns and relationships learned from
+historical data. They are used in forecasting, classification, and
+regression tasks, and are valuable in applications such as weather
+forecasting, customer churn prediction, and stock price forecasting.
+Examples: Linear regression, decision trees, random forests, neural
+networks, and support vector machines are popular predictive modeling
+techniques.</p></li>
+</ul>
+<p>In summary, descriptive models help summarize and visualize data,
+inferential models draw conclusions about populations, and predictive
+models make future predictions based on historical data. The choice of
+model depends on your specific goals and the type of analysis you need
+to perform, whether it’s for understanding data, drawing statistical
+inferences, or making predictions for decision-making.</p>
+</div>
+<div id="some-functions-of-tidymodels" class="section level1">
+<h1>Some functions of tidymodels</h1>
+<ul>
+<li>broom: takes the messy output of built-in functions in R, such
+as lm, nls, or t.test, and turns them into tidy data frames.</li>
+<li>dials: has tools to create and manage values of tuning
+parameters.</li>
+<li>dplyr: contains a grammar for data manipulation.</li>
+<li>ggplot2: implements a grammar of graphics.</li>
+<li>infer: is a modern approach to statistical inference.</li>
+<li>parsnip: is a tidy, unified interface to creating models.</li>
+<li>purrr: is a functional programming toolkit.</li>
+<li>recipe: is a general data preprocessor with a modern interface. It
+can create model matrices that incorporate feature engineering,
+imputation, and other help tools.</li>
+<li>rsample: has infrastructure for resampling data so that models can
+be assessed and empirically validated.</li>
+<li>tibble: has a modern re-imagining of the data frame.</li>
+<li>tune: contains the functions to optimize model
+hyper-parameters.</li>
+<li>workflows: has methods to combine pre-processing steps and models
+into a single object.</li>
+<li>yardstick: contains tools for evaluating models (e.g.accuracy, RMSE,
+etc.).</li>
+</ul>
+<p>A list of all tidymodels functions across different CRAN packages can
+be found at <a href="https://www.tidymodels.org/find/"
+class="uri">https://www.tidymodels.org/find/</a></p>
+<p>Libraries to use in this exercise: (PLEASE ADD ALL OF THEM HERE!)</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div>
 </div>
 
 
