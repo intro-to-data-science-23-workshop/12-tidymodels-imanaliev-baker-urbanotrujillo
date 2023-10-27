@@ -126,6 +126,10 @@ library(lubridate)
 ```
 
 Load the dataset and view the first rows. In this case we will use the dataset heart from the kmed package which contains 14 variables of 297 patients for their heart disease diagnosis. Metadata can be found in: https://search.r-project.org/CRAN/refmans/kmed/html/heart.html
+
+The data set is taken from machine learning repository of UCI.
+Reference: Lichman, M. (2013). UCI machine learning repository.
+
 ```{r}
 library(kmed)
 data <- heart
@@ -138,6 +142,9 @@ summary(data)
 ```
 
 Tranform dataset:
+Firstly, we need to create specific variable for heart disease with only two values based on class variable.
+Then, we need to transform values in heart_disease, sex and fbs (Fasting blood sugar more than 120 mg/dl) objects as factors, since it will be our predictors
+Thirdly, we need to transform age groups on three categories
 ```{r}
 # create variable of heart disease
 data <- data %>%
@@ -167,6 +174,13 @@ test_data  <- testing(data_split)
 ```
 
 Set up the recipe for pre-processing:
+First of all, we create a recipe object that defines the data preprocessing steps. It specifies that you want to predict the "heart_disease" variable based on all other variables (indicated by heart_disease ~ .) using the data from the "train_data" dataset.
+2) step_impute_median to replace missing values in numeric columns with the median value of that column. The all_numeric() function selects all numeric columns, and the -all_outcomes() function excludes the outcome variable (in this case, "heart_desease") from the imputation.
+3) This step uses step_dummy to convert categorical variables into dummy (or indicator) variables. It creates binary columns for each category in the original categorical variable. The all_nominal() function selects all nominal columns, and the -all_outcomes() function excludes the outcome variable from this step. Keep_original_cols allows to save original names of columns
+4) This step uses step_zv to remove predictors (independent variables) that have constant or zero variance, as they don't provide valuable information. The all_predictors() function selects all predictors for this step.
+5) This step uses step_normalize to standardize (normalize) numeric variables to have a mean of 0 and a standard deviation of 1. It helps in ensuring that all numeric variables have the same scale. The all_numeric() function selects all numeric columns, and the -all_outcomes() function excludes the outcome variable from this step.
+6) Final step allow to convert factor to numerical
+
 ```{r}
 recipe <- recipe(heart_disease ~ ., data = train_data) %>% # Create a recipe object for data pre-processing
   step_impute_median(all_numeric(), -all_outcomes()) %>% # Replace missing values in numeric columns with median values
@@ -177,6 +191,9 @@ recipe <- recipe(heart_disease ~ ., data = train_data) %>% # Create a recipe obj
 ```
 
 Process the training and testing sets with the recipe:
+ The "prep" function is typically used to prepare or preprocess the data according to the steps specified in the recipe object.
+ The "bake" function is used to apply the recipe transformations to the training data. The result is a new dataset that has been processed according to the steps defined in the recipe.
+ 
 ```{r}
 train_processed <- recipe %>%
   prep(train_data) %>%
@@ -187,6 +204,18 @@ test_processed <- recipe %>%
 ```
 
 Creating workflow
+linear_reg(): This function is used to create a specification for a linear regression model. It specifies that you want to build a linear regression model.
+
+set_engine("glm"): This sets the modeling engine for the linear regression model. In this case, it specifies that the model should be implemented using the "glm" engine, which typically refers to the Generalized Linear Model engine available in R. This line effectively associates the "glm" engine with the linear regression model specification.
+
+The "workflow" function is used to create an empty workflow, which is a container for organizing the machine learning process. A workflow typically consists of data preprocessing (recipe) and model specification.
+
+The recipe object have been defined above and contains the data preprocessing steps, such as data transformations, scaling, and other data preparation steps. This step links the data preprocessing recipe to the workflow.
+
+"add_model" adds the linear regression model specification (glm_spec) to the workflow. The workflow will now use the specified linear regression model with the "glm" engine for modeling.
+
+To sum up, this code sets up a workflow for linear regression by specifying the model and its engine, and it associates this model with a data preprocessing recipe.
+
 ```{r}
 glm_spec <- linear_reg() %>%
   set_engine("glm")
@@ -201,12 +230,16 @@ For processing multiple steps, it is often helpful to build a "workflow", which 
 wflow
 ```
 Let's create a model fit using the training set:
+
+We are fitting (training) the specified machine learning workflow with training data
+The result of this fitting process is stored in the wflow_fit object, which can be used for making predictions on new data or for further evaluation of the model's performance.
 ```{r}
 wflow_fit <- wflow %>%
   fit(data = train_processed)
 wflow_fit
 ```
 
+With summary function, we can show key metrics of our model
 ```{r}
 summary(wflow)
 ```
