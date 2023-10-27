@@ -31,7 +31,7 @@
       // Author information
       presenters: [
             {
-        name:  'Henry Baker, Daniyar Imanaliev, Isabella Urbano Trujillo' ,
+        name:  'Henry Baker (228755), Daniyar Imanaliev (238522), Isabella Urbano Trujillo (233239)' ,
         company: '',
         gplus: '',
         twitter: '',
@@ -3316,7 +3316,7 @@ summary(model)</pre>
 
 <p>And after all that, having <strong>finally</strong> run your model(s)…</p>
 
-</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>…what if you realized you’d been heading in the wrong direction all this time and wanted to run a <em>different</em> model? …you’re in trouble!</h2></hgroup><article  id="what-if-you-realized-youd-been-heading-in-the-wrong-direction-all-this-time-and-wanted-to-run-a-different-model-youre-in-trouble" class="smaller ">
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>…what if you realized you’d been heading in the wrong direction all this time and wanted to run a <em>different</em> model…</h2></hgroup><article  id="what-if-you-realized-youd-been-heading-in-the-wrong-direction-all-this-time-and-wanted-to-run-a-different-model" class="smaller ">
 
 </article></slide><slide class=""><hgroup><h2>Worse still, R’s strength is also its greatest weakness…</h2></hgroup><article  id="worse-still-rs-strength-is-also-its-greatest-weakness" class="smaller ">
 
@@ -3333,7 +3333,7 @@ Plotting an example; exampling a plot:
 
 </h3>
 
-<p>On the follow slides are <strong>three common methods for creating a scatter plot of two numeric variables</strong>. In each separate groups of developers devised three distinct interfaces for the same task. Each has advantages and disadvantages. Each is different!</p>
+<p>What follows are <strong>three common methods for creating a scatter plot of two numeric variables</strong>. In each separate groups of developers devised three distinct interfaces for the same task. Each has advantages and disadvantages. Each is different!</p>
 
 <p>Keep in mind for comparison: in Python, when approaching a problem:</p>
 
@@ -3479,7 +3479,7 @@ test_data &lt;- testing(data_split)</pre>
 
 <ul>
 <li>Optional step to assign roles - not an intrinsic part of the process</li>
-<li>can be useful to assign &ldquo;ID&rdquo; role to variables.</li>
+<li>can be useful to assign &ldquo;ID&rdquo;n role to variables.</li>
 <li>ID variables are not included in the model but are retained for investigation purposes later on (eg identifying outliers).</li>
 </ul>
 
@@ -3496,7 +3496,7 @@ test_data &lt;- testing(data_split)</pre>
 <p>Feature engineering involves several preprocessing steps essential for transforming your raw data into a format that is better suited for modeling. It involves creating or deriving new features from existing ones, selecting relevant features, and encoding data in ways that provide significant context or expose meaningful patterns.</p>
 
 <ul>
-<li><strong>Feature extraction</strong> eg deriving day of the week from a date variable; capturing seasonal trends.</li>
+<li><strong>Feature extraction</strong> e.g. deriving the day of the week from a date variable; or capturing seasonal trends.</li>
 <li><strong>Normalization / Scale transformation:</strong> Standardizes the range / taking the log.</li>
 <li><strong>One-hot encoding/Dummy encoding:</strong> Converts categorical variables into a series of binary columns (indicator variables)</li>
 <li><strong>Handling missing values:</strong> Techniques to handle missing data (e.g., imputation).</li>
@@ -3639,22 +3639,28 @@ summary(prepped &lt;- prep(rec, training = mtcars))</pre>
 ## 4 PC4      &lt;chr [2]&gt; predictor derived
 ## 5 PC5      &lt;chr [2]&gt; predictor derived</pre>
 
+</article></slide><slide class=""><hgroup><h2></h2></hgroup><article  class="smaller">
+
+<p>Demonstrates normalization, PCA, and dummy coding step_* functions for different transformations Easy reproduction and consistency in data analysis</p>
+
+<p>Note: Witness &lsquo;recipes&rsquo; in its true element through this walkthrough. Here, we’re taking the renowned &lsquo;mtcars&rsquo; dataset and applying a series of transformations, all within the tidy, understandable structure that &lsquo;recipes&rsquo; provides. Note how each ’step_*’ function corresponds to a specific transformation, making your preprocessing steps modular, clear, and easy to adjust or reproduce. This hands-on example showcases the practical elegance of &lsquo;recipes&rsquo; in data preprocessing.</p>
+
 </article></slide><slide class=""><hgroup><h2>From Preprocessing to Modeling: A Seamless Journey</h2></hgroup><article  id="from-preprocessing-to-modeling-a-seamless-journey" class="smaller ">
 
 <ul>
-<li><strong>Tidymodeling: Not just preprocessing</strong>
+<li>Tidymodeling: Not just preprocessing
 
 <ul>
 <li>A unified framework for all stages of data analysis</li>
 <li>Modeling, validation, and interpretation within the same ecosystem</li>
 </ul></li>
-<li><strong>Transitioning with ease</strong>
+<li>Transitioning with ease
 
 <ul>
 <li>Direct passage from &lsquo;recipes&rsquo; preprocessing to model input</li>
 <li>No need for manual data reshaping or reformatting</li>
 </ul></li>
-<li><strong>Compatibility and Flexibility</strong>
+<li>Compatibility and Flexibility
 
 <ul>
 <li>Works with a range of model types (e.g., regression, classification)</li>
@@ -3664,7 +3670,7 @@ summary(prepped &lt;- prep(rec, training = mtcars))</pre>
 
 <p><img src='path_to_workflow_visualization.png' title=''/> <!--Replace with the path to your image--></p>
 
-<p>The power of tidymodeling becomes evident in its holistic approach. It’s not just about individual steps; it’s the journey from raw data to insightful models, all within the same, consistent environment. Tidymodeling eliminates the disjointed processes often encountered in traditional methods, replacing them with a streamlined, intuitive workflow.</p>
+<p>Note: The true power of tidymodeling becomes evident in its holistic approach. It’s not just about individual steps; it’s the journey from raw data to insightful models, all within the same, consistent environment. One of tidymodeling’s most compelling advantages is the ease of transition between stages of data analysis. It eliminates the disjointed processes often encountered in traditional methods, replacing them with a streamlined, intuitive workflow. And with its broad compatibility, tidymodeling ensures that you have the tools you need, regardless of your specific modeling or validation requirements.</p>
 
 </article></slide><slide class=""><hgroup><h2>Getting More Hands on</h2></hgroup><article  id="getting-more-hands-on" class="smaller ">
 
@@ -3721,7 +3727,7 @@ summary(prepped &lt;- prep(rec, training = mtcars))</pre>
 <p> </p>
 
 <ul>
-<li><a href='https://www.tmwr.org/' title=''>Tidy Modeling with R Text Book</a>, a comprehensive text book featuring extensive example using Ames Housing Data set by Max Kuhn &amp; Julia Silge, 2023.</li>
+<li><a href='https://www.tmwr.org/' title=''>Tidy Modeling with R Text Book</a>, a comprehensive text book featuring extensive example using Ames Housing Data set by Max Kuhn &amp; Julia Silge, 2023. ]</li>
 </ul></article></slide>
 
 
