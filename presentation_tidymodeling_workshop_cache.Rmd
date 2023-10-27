@@ -29,9 +29,9 @@ library(dplyr)
 ---
 
 ### Presented by 
-- Henry Baker
-- Isabella Urbano Trujillo 
-- Daniyar Imanaliev
+- Henry Baker (228755), 
+- Daniyar Imanaliev (238522), 
+- Isabella Urbano Trujillo (233239)
 
 <div style="text-align: center;">
   <img src="pics/tidymodels_packages.jpg" style="max-height: 250px; opacity: 0.5;">
