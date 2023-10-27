@@ -235,3 +235,4 @@ Create Anova table for the models:
 anova(model_1)
 anova(model_2)
 ```
+You can find more examples here: https://www.tidymodels.org/learn/ 
