@@ -1,11 +1,7 @@
 ---
 title: "Tidy Data Preprocessing in R"
 subtitle: "Workshop: How to get the most out of Tidymodeling with R"
-<<<<<<< Updated upstream
 author: "Daniyar Imanaliev, Henry Baker, Isabella Urbano Trujillo"
-=======
-author: "Henry Baker (228755), Isabella Urbano-Trujillo, Daniyar Imanaliev"
->>>>>>> Stashed changes
 date: "`r Sys.Date()`"
 output: 
   ioslides_presentation:
@@ -34,18 +30,10 @@ library(dplyr)
 
 ---
 
-<<<<<<< Updated upstream
-### Presented by Daniyar Imanaliev, Henry Baker, Isabella Urbano Trujillo
-### ADD GROUP <!-- .element: class="fragment" data-fragment-index="3" -->
-### October 30, 2023
-=======
 ### Presented by 
-- Henry Baker (228755), 
+- Henry Baker,
 - Isabella Urbano-Trujillo, 
 - Daniyar Imanaliev
-
-### October 2, 2023
->>>>>>> Stashed changes
 
 <div style="text-align: center;">
   <img src="pics/tidymodels_packages.jpg" style="max-height: 250px; opacity: 0.5;">
