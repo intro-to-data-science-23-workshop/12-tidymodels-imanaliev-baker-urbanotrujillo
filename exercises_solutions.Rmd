@@ -1,0 +1,110 @@
+---
+title: "exercises_solutions"
+output: html_document
+date: "2023-10-27"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Let's use the penguins dataset from the palmerpenguins package:
+```{r, include = T, echo = F}
+# Load necessary packages
+library(palmerpenguins)
+library(tidymodels)
+library(ranger)
+
+# Load the "palmerpenguins" dataset
+data("penguins")
+
+# Subset the dataset to keep observations where "species" is "Adelie" or "Gentoo"
+subset_penguins <- penguins[penguins$species %in% c("Adelie", "Gentoo"), ]
+```
+
+## Exercises with solutions
+
+# 1. Pre-processing
+```{r}
+# Create a data split for training and testing
+set.seed(123)
+penguins_split <- initial_split(subset_penguins, prop = 0.7, strata = species)
+penguins_train <- training(penguins_split)
+penguins_test <- testing(penguins_split)
+
+# Define a recipe for data pre-processing
+recipe1 <- recipe(species ~ bill_length_mm + bill_depth_mm + flipper_length_mm + body_mass_g,
+                  data = penguins_train) %>%
+  step_impute_median(all_predictors()) %>%
+  step_dummy(all_nominal(), -all_outcomes())
+
+# Define other two different recipes for data pre-processing
+recipe2 <- recipe(species ~ bill_length_mm + bill_depth_mm + flipper_length_mm + body_mass_g,
+                  data = penguins_train) %>%
+  step_impute_median(all_predictors()) %>%
+  step_dummy(all_nominal(), -all_outcomes())
+
+recipe3 <- recipe(species ~ bill_length_mm + bill_depth_mm + flipper_length_mm + body_mass_g,
+                  data = penguins_train) %>%
+  step_impute_median(all_predictors()) %>%
+  step_scale(all_predictors()) %>%
+  step_dummy(all_nominal(), -all_outcomes())
+```
+
+# 2. Modeling
+```{r}
+# Define a model specification
+model_spec1 <- logistic_reg() %>%
+  set_engine("glm") %>%
+  set_mode("classification")
+
+# Define two other model specifications
+model_spec2 <- decision_tree() %>%
+  set_engine("rpart") %>%
+  set_mode("classification")
+
+model_spec3 <- rand_forest() %>%
+  set_engine("ranger") %>%
+  set_mode("classification")
+
+# Create three workflows combining the recipes and model specifications
+workflow1 <- workflow() %>%
+  add_recipe(recipe1) %>%
+  add_model(model_spec1)
+
+workflow2 <- workflow() %>%
+  add_recipe(recipe2) %>%
+  add_model(model_spec2)
+
+workflow3 <- workflow() %>%
+  add_recipe(recipe3) %>%
+  add_model(model_spec3)
+
+# Fit the three models bases on the three workflows
+fit1 <- fit(workflow1, data = penguins_train)
+fit2 <- fit(workflow2, data = penguins_train)
+fit3 <- fit(workflow3, data = penguins_train)
+
+# Predict using the test data for all three models
+pred1 <- predict(fit1, new_data = penguins_test)
+pred2 <- predict(fit2, new_data = penguins_test)
+pred3 <- predict(fit3, new_data = penguins_test)
+
+# Evaluate the models
+metrics1 <- pred1 %>%
+  bind_cols(penguins_test) %>%
+  metrics(truth = species, estimate = .pred_class)
+
+metrics2 <- pred2 %>%
+  bind_cols(penguins_test) %>%
+  metrics(truth = species, estimate = .pred_class)
+
+metrics3 <- pred3 %>%
+  bind_cols(penguins_test) %>%
+  metrics(truth = species, estimate = .pred_class)
+
+# Compare model performance
+bind_rows(Model1 = metrics1, Model2 = metrics2, Model3 = metrics3)
+```
+
+

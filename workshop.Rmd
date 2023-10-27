@@ -108,7 +108,7 @@ Post-processing involves evaluating the model's performance, selecting the best 
 Now we are going to do a practical exercise to show how to use the tidymodels package:
 
 Define the libraries to use: (PLEASE ADD ALL OF THEM HERE!)
-```{r, include = T}
+```{r, include = T, echo = F}
 library(tidymodels)
 library(dplyr)
 library(ggplot2)
