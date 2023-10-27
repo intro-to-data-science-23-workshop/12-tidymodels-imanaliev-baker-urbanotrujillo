@@ -2,7 +2,7 @@
 title: "Tidy Data Preprocessing in R"
 subtitle: "Workshop: How to get the most out of Tidymodeling with R"
 author: "Daniyar Imanaliev, Henry Baker, Isabella Urbano Trujillo"
-date: "`r Sys.Date()`"
+date: "October 30, 2023"
 output: 
   ioslides_presentation:
     widescreen: true

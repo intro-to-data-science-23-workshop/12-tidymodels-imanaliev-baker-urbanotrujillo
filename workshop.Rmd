@@ -107,7 +107,7 @@ Post-processing involves evaluating the model's performance, selecting the best 
 # Example
 Now we are going to do a practical exercise to show how to use the tidymodels package:
 
-Define the libraries to use: (PLEASE ADD ALL OF THEM HERE!)
+Define the libraries to use:
 ```{r, include = T, echo = F}
 library(tidymodels)
 library(dplyr)
@@ -132,12 +132,12 @@ data <- heart
 head(data)
 ```
 
-Check summary statistics of the dataset
+Check summary statistics of the dataset:
 ```{r}
 summary(data)
 ```
 
- ## PLEASE INTEGRATE THIS STEPS IN RECEPIE ##
+Tranform dataset:
 ```{r}
 # create variable of heart disease
 data <- data %>%
@@ -158,10 +158,6 @@ data <- data %>%
 data$age_group <- as.factor(data$age_group)
 ```
 
-```{r}
-# data$class <- as.factor(data$class) OUR DEPENDENT VAR IS heart_disease
-```
-
 Split the data into training (75%) and testing (25%) sets:
 ```{r}
 set.seed(123) # for reproducibility
@@ -170,9 +166,8 @@ train_data <- training(data_split)
 test_data  <- testing(data_split)
 ```
 
-Set up the enhanced recipe for pre-processing:
+Set up the recipe for pre-processing:
 ```{r}
-
 recipe <- recipe(heart_disease ~ ., data = train_data) %>% # Create a recipe object for data preprocessing
   step_impute_median(all_numeric(), -all_outcomes()) %>% # Replace missing values in numeric columns with median values
   step_dummy(all_nominal(), -all_outcomes(), keep_original_cols = TRUE) %>% # Convert categorical variables to dummy/indicator variables
@@ -201,7 +196,7 @@ wflow <- workflow() %>%
   add_model(glm_spec)
 ```
 
-For processing multiple steps, it is often helpful to build a "workflow", which is essentially a container object that combines the information required to fit and predict from a model.   Steps such as recipes and models can be added to these workflows and then changes and iterations can be performed quickly.
+For processing multiple steps, it is often helpful to build a "workflow", which is essentially a container object that combines the information required to fit and predict from a model. Steps such as recipes and models can be added to these workflows and then changes and iterations can be performed quickly.
 ```{r}
 wflow
 ```
@@ -217,44 +212,27 @@ wflow_fit
 summary(wflow)
 ```
 
-
-
-
-
-
-
 Create different models for the dependent variable "heart disease":
 ```{r}
 # create linear regression models
 
 # model 1
-model_1 <- glm(heart_disease == 1 ~ age + sex + trestbps + chol + fbs + thalach, data = data, family = binomial)
+model_1 <- glm(heart_disease == 1 ~ age + sex + trestbps + chol + fbs + thalach, data = train_processed, family = binomial)
 summary(model_1)
 
 # model 2
-model_2 <- glm(heart_disease ==1  ~ age + sex + trestbps + chol + fbs + thalach + sex*age_group, data = data, family = binomial)
+model_2 <- glm(heart_disease ==1  ~ age + sex + trestbps + chol + fbs + thalach + sex*age_group, data = train_processed, family = binomial)
 summary(model_2)
-
-# model 3
-
 ```
-
-
-Confidence interval for the coefficient
+Confidence interval for the coefficients:
 ```{r}
-confint(model)
+confint(model_1)
+confint(model_2)
 ```
 
-Let's create a scatterplot to visualize the relationship between mpg and horsepower.
+Create Anova table for the models:
 ```{r}
-ggplot(data, aes(x = age, y = heart_disease)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE, color = "blue") +
-  labs(title = "-", x = "Age", y = "Heart Disease")
+anova(model_1)
+anova(model_2)
 ```
-
-Anova table for the model
-```{r}
-anova(lm_model)
-
-```
+You can find more examples here: https://www.tidymodels.org/learn/ 
