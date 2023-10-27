@@ -20,6 +20,8 @@ data("penguins")
 
 # Subset the dataset to keep observations where "species" is "Adelie" or "Gentoo"
 subset_penguins <- penguins[penguins$species %in% c("Adelie", "Gentoo"), ]
+subset_penguins$species <- as.character(subset_penguins$species)
+subset_penguins$species <- as.factor(subset_penguins$species)
 ```
 
 ## Exercises with solutions
@@ -87,15 +89,20 @@ fit3 <- fit(workflow3, data = train_data)
 # 3. Post-processing
 ```{r}
 # Make predictions
-predictions1 <- predict(fit1, new_data = test_data)
-predictions2 <- predict(fit2, new_data = test_data)
-predictions3 <- predict(fit3, new_data = test_data)
+predictions1 <- predict(fit1, new_data = test_data) %>%
+  select(.pred_class)
 
-# Evaluate the models
-metrics1 <- yardstick::metrics(predictions1, truth = "species", estimate = ".pred_class")
-metrics2 <- yardstick::metrics(predictions2, truth = "species", estimate = ".pred_class")
-metrics3 <- yardstick::metrics(predictions3, truth = "species", estimate = ".pred_class")
+predictions2 <- predict(fit2, new_data = test_data) %>%
+  select(.pred_class)
+
+predictions3 <- predict(fit3, new_data = test_data) %>%
+  select(.pred_class)
+
+# Evaluate the models (this can be done with yardstick too)
+accuracy1 <- mean(predictions1$.pred_class == test_data$species)
+accuracy2 <- mean(predictions2$.pred_class == test_data$species)
+accuracy3 <- mean(predictions3$.pred_class == test_data$species)
 
 # Compare the models
-bind_rows(model1 = metrics1, model2 = metrics2, model3 = metrics3)
+bind_rows(model1 = accuracy1, model2 = accuracy2, model3 = accuracy3)
 ```
