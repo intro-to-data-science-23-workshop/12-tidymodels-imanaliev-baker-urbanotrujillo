@@ -172,20 +172,25 @@ test_data  <- testing(data_split)
 
 Set up the enhanced recipe for preprocessing:
 ```{r}
-recipe <- recipe(class ~ ., data = train_data) %>% # Create a recipe object for data preprocessing
+
+recipe <- recipe(heart_disease ~ ., data = train_data) %>% # Create a recipe object for data preprocessing
   step_impute_median(all_numeric(), -all_outcomes()) %>% # Replace missing values in numeric columns with median values
-  step_unknown(all_nominal(), -all_outcomes()) %>%# Handle unknown levels in categorical columns 
-  step_dummy(all_nominal(), -all_outcomes()) %>% # Convert categorical variables to dummy/indicator variables
+  step_dummy(all_nominal(), -all_outcomes(), keep_original_cols = TRUE) %>% # Convert categorical variables to dummy/indicator variables
   step_zv(all_predictors()) %>% # Remove constant or zero-variance predictors
-  step_normalize(all_numeric(), -all_outcomes()) %>% # Normalize numeric variables  
-  prep() # Prepare the recipe
+  step_normalize(all_numeric(), -all_outcomes()) %>%# Normalize numeric variables
+  step_integer(all_factor()) #Convert factors to numerical
 ```
 
 Process the training and testing sets with the recipe:
 ```{r}
-train_processed <- bake(recipe, new_data = train_data)
-test_processed  <- bake(recipe, new_data = test_data)
+train_processed <- recipe %>%
+  prep(train_data) %>%
+  bake(train_data)
+test_processed <- recipe %>%
+  prep(test_data) %>%
+  bake(test_data)
 ```
+
 
 #Creating a workflow 
 ```{r}
@@ -197,8 +202,20 @@ wflow <- workflow() %>%
   add_model(glm_spec)
 ```
 
+For processing multiple steps, it is often helpful to build a "workflow", which is essentially a container object that combines the information required to fit and predict from a model.   Steps such as recipes and models can be added to these workflows and then changes and iterations can be performed quickly.
 ```{r}
+wflow
+```
+Let's create a model fit using the training set:
 
+```{r}
+wflow_fit <- wflow %>%
+  fit(data = train_processed)
+wflow_fit
+```
+
+```{r}
+summary(wflow)
 ```
 
 
@@ -220,6 +237,7 @@ model_2 <- glm(heart_disease ==1  ~ age + sex + trestbps + chol + fbs + thalach 
 summary(model_2)
 
 # model 3
+
 ```
 
 
