@@ -41,11 +41,11 @@ recipe1 <- recipe(species ~ bill_length_mm + bill_depth_mm + flipper_length_mm +
 
 recipe2 <- recipe(species ~ bill_length_mm + bill_depth_mm + flipper_length_mm + body_mass_g, data = train_data) %>%
   step_impute_median(all_predictors()) %>%
+  step_scale(all_predictors()) %>%
   step_dummy(all_nominal(), -all_outcomes())
 
 recipe3 <- recipe(species ~ bill_length_mm + bill_depth_mm + flipper_length_mm + body_mass_g, data = train_data) %>%
   step_impute_median(all_predictors()) %>%
-  step_scale(all_predictors()) %>%
   step_dummy(all_nominal(), -all_outcomes())
 
 # Pre-process the data using the recipe you like the most
