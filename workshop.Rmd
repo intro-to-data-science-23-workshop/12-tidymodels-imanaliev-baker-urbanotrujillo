@@ -172,7 +172,7 @@ recipe <- recipe(heart_disease ~ ., data = train_data) %>% # Create a recipe obj
   step_impute_median(all_numeric(), -all_outcomes()) %>% # Replace missing values in numeric columns with median values
   step_dummy(all_nominal(), -all_outcomes(), keep_original_cols = TRUE) %>% # Convert categorical variables to dummy/indicator variables
   step_zv(all_predictors()) %>% # Remove constant or zero-variance predictors
-  step_normalize(all_numeric(), -all_outcomes()) %>%# Normalize numeric variables
+  step_normalize(all_numeric(), -all_outcomes()) %>% # Normalize numeric variables
   step_integer(all_factor()) # Convert factors to numerical
 ```
 
