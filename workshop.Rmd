@@ -108,7 +108,7 @@ Post-processing involves evaluating the model's performance, selecting the best 
 Now we are going to do a practical exercise to show how to use the tidymodels package:
 
 Define the libraries to use: (PLEASE ADD ALL OF THEM HERE!)
-```{r, include = T}
+```{r, include = T, echo = F}
 library(tidymodels)
 library(dplyr)
 library(ggplot2)
@@ -170,7 +170,7 @@ train_data <- training(data_split)
 test_data  <- testing(data_split)
 ```
 
-Set up the enhanced recipe for preprocessing:
+Set up the enhanced recipe for pre-processing:
 ```{r}
 
 recipe <- recipe(heart_disease ~ ., data = train_data) %>% # Create a recipe object for data preprocessing
@@ -191,8 +191,7 @@ test_processed <- recipe %>%
   bake(test_data)
 ```
 
-
-#Creating a workflow 
+Creating workflow
 ```{r}
 glm_spec <- linear_reg() %>%
   set_engine("glm")
@@ -259,9 +258,3 @@ Anova table for the model
 anova(lm_model)
 
 ```
-
-
-
-
-
-
