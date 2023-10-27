@@ -399,8 +399,10 @@ steps for understanding commence, they are a heuristic process; we
 cannot pre-determine how long they may take. The cycle of
 transformation, modeling, and visualization often requires multiple
 iterations.</p>
-<p><img src="pics/data_process.png" width="90%" style="display: block; margin: auto;" />
-# Types of models</p>
+<p><img src="pics/data_process.png" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="types-of-models" class="section level1">
+<h1>Types of models</h1>
 <ul>
 <li><p>Descriptive Models: these aim to summarize and describe data to
 gain insights into its characteristics. They are used for exploratory
@@ -510,75 +512,241 @@ metrics.</li>
 <h1>Example</h1>
 <p>Now we are going to do a practical exercise to show how to use the
 tidymodels package:</p>
-<p>Define the libraries to use: (PLEASE ADD ALL OF THEM HERE!)</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">library</span>(rsample)</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">library</span>(recipes)</span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">library</span>(parsnip)</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="fu">library</span>(workflows)</span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="fu">library</span>(tune)</span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="fu">library</span>(yardstick)</span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="fu">library</span>(tune)</span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="fu">library</span>(dials)</span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="fu">library</span>(crimedata)</span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code></pre></div>
+<p>Define the libraries to use:</p>
 <p>Load the dataset and view the first rows. In this case we will use
-the dataset “blabla” which blabla.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">data</span>(mtcars)</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">head</span>(mtcars)</span></code></pre></div>
+the dataset heart from the kmed package which contains 14 variables of
+297 patients for their heart disease diagnosis. Metadata can be found
+in: <a
+href="https://search.r-project.org/CRAN/refmans/kmed/html/heart.html"
+class="uri">https://search.r-project.org/CRAN/refmans/kmed/html/heart.html</a></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(kmed)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> heart</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">head</span>(data)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["mpg"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["cyl"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["disp"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["hp"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["drat"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["wt"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["qsec"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["vs"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["am"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["gear"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["carb"],"name":[11],"type":["dbl"],"align":["right"]}],"data":[{"1":"21.0","2":"6","3":"160","4":"110","5":"3.90","6":"2.620","7":"16.46","8":"0","9":"1","10":"4","11":"4","_rn_":"Mazda RX4"},{"1":"21.0","2":"6","3":"160","4":"110","5":"3.90","6":"2.875","7":"17.02","8":"0","9":"1","10":"4","11":"4","_rn_":"Mazda RX4 Wag"},{"1":"22.8","2":"4","3":"108","4":"93","5":"3.85","6":"2.320","7":"18.61","8":"1","9":"1","10":"4","11":"1","_rn_":"Datsun 710"},{"1":"21.4","2":"6","3":"258","4":"110","5":"3.08","6":"3.215","7":"19.44","8":"1","9":"0","10":"3","11":"1","_rn_":"Hornet 4 Drive"},{"1":"18.7","2":"8","3":"360","4":"175","5":"3.15","6":"3.440","7":"17.02","8":"0","9":"0","10":"3","11":"2","_rn_":"Hornet Sportabout"},{"1":"18.1","2":"6","3":"225","4":"105","5":"2.76","6":"3.460","7":"20.22","8":"1","9":"0","10":"3","11":"1","_rn_":"Valiant"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["age"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["sex"],"name":[2],"type":["lgl"],"align":["right"]},{"label":["cp"],"name":[3],"type":["fct"],"align":["left"]},{"label":["trestbps"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["chol"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["fbs"],"name":[6],"type":["lgl"],"align":["right"]},{"label":["restecg"],"name":[7],"type":["fct"],"align":["left"]},{"label":["thalach"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["exang"],"name":[9],"type":["lgl"],"align":["right"]},{"label":["oldpeak"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["slope"],"name":[11],"type":["fct"],"align":["left"]},{"label":["ca"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["thal"],"name":[13],"type":["fct"],"align":["left"]},{"label":["class"],"name":[14],"type":["int"],"align":["right"]}],"data":[{"1":"63","2":"TRUE","3":"1","4":"145","5":"233","6":"TRUE","7":"2","8":"150","9":"FALSE","10":"2.3","11":"3","12":"0","13":"6","14":"0","_rn_":"1"},{"1":"67","2":"TRUE","3":"4","4":"160","5":"286","6":"FALSE","7":"2","8":"108","9":"TRUE","10":"1.5","11":"2","12":"3","13":"3","14":"2","_rn_":"2"},{"1":"67","2":"TRUE","3":"4","4":"120","5":"229","6":"FALSE","7":"2","8":"129","9":"TRUE","10":"2.6","11":"2","12":"2","13":"7","14":"1","_rn_":"3"},{"1":"37","2":"TRUE","3":"3","4":"130","5":"250","6":"FALSE","7":"0","8":"187","9":"FALSE","10":"3.5","11":"3","12":"0","13":"3","14":"0","_rn_":"4"},{"1":"41","2":"FALSE","3":"2","4":"130","5":"204","6":"FALSE","7":"2","8":"172","9":"FALSE","10":"1.4","11":"1","12":"0","13":"3","14":"0","_rn_":"5"},{"1":"56","2":"TRUE","3":"2","4":"120","5":"236","6":"FALSE","7":"0","8":"178","9":"FALSE","10":"0.8","11":"1","12":"0","13":"3","14":"0","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<p>Check summary statistics for mpg and horsepower</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">summary</span>(mtcars<span class="sc">$</span>mpg)</span></code></pre></div>
-<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-  10.40   15.43   19.20   20.09   22.80   33.90 </code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">summary</span>(mtcars<span class="sc">$</span>hp)</span></code></pre></div>
-<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-   52.0    96.5   123.0   146.7   180.0   335.0 </code></pre>
-<p>Create a linear regression model</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>lm_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp, <span class="at">data =</span> mtcars)</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">summary</span>(lm_model)</span></code></pre></div>
-<pre><code>
-Call:
-lm(formula = mpg ~ hp, data = mtcars)
+<p>Check summary statistics of the dataset:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">summary</span>(data)</span></code></pre></div>
+<pre><code>      age           sex          cp         trestbps          chol      
+ Min.   :29.00   Mode :logical   1: 23   Min.   : 94.0   Min.   :126.0  
+ 1st Qu.:48.00   FALSE:96        2: 49   1st Qu.:120.0   1st Qu.:211.0  
+ Median :56.00   TRUE :201       3: 83   Median :130.0   Median :243.0  
+ Mean   :54.54                   4:142   Mean   :131.7   Mean   :247.4  
+ 3rd Qu.:61.00                           3rd Qu.:140.0   3rd Qu.:276.0  
+ Max.   :77.00                           Max.   :200.0   Max.   :564.0  
+    fbs          restecg    thalach        exang            oldpeak     
+ Mode :logical   0:147   Min.   : 71.0   Mode :logical   Min.   :0.000  
+ FALSE:254       1:  4   1st Qu.:133.0   FALSE:200       1st Qu.:0.000  
+ TRUE :43        2:146   Median :153.0   TRUE :97        Median :0.800  
+                         Mean   :149.6                   Mean   :1.056  
+                         3rd Qu.:166.0                   3rd Qu.:1.600  
+                         Max.   :202.0                   Max.   :6.200  
+ slope         ca         thal        class       
+ 1:139   Min.   :0.0000   3:164   Min.   :0.0000  
+ 2:137   1st Qu.:0.0000   6: 18   1st Qu.:0.0000  
+ 3: 21   Median :0.0000   7:115   Median :0.0000  
+         Mean   :0.6768           Mean   :0.9461  
+         3rd Qu.:1.0000           3rd Qu.:2.0000  
+         Max.   :3.0000           Max.   :4.0000  </code></pre>
+<p>Tranform dataset:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># create variable of heart disease</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">heart_disease =</span> <span class="fu">ifelse</span>(class <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>), <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>data<span class="sc">$</span>heart_disease <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data<span class="sc">$</span>heart_disease)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>data<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data<span class="sc">$</span>sex)</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>data<span class="sc">$</span>fbs <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data<span class="sc">$</span>fbs)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co"># create categorical variable for age</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">case_when</span>(</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>    age <span class="sc">&lt;</span> <span class="dv">40</span> <span class="sc">~</span> <span class="st">&quot;Young adult&quot;</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>    age <span class="sc">&gt;=</span> <span class="dv">40</span> <span class="sc">&amp;</span> age <span class="sc">&lt;</span> <span class="dv">60</span> <span class="sc">~</span> <span class="st">&quot;Adult&quot;</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>    age <span class="sc">&gt;=</span> <span class="dv">60</span> <span class="sc">~</span> <span class="st">&quot;Senior&quot;</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>  ))</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>data<span class="sc">$</span>age_group <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data<span class="sc">$</span>age_group)</span></code></pre></div>
+<p>Split the data into training (75%) and testing (25%) sets:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># for reproducibility</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>data_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(data, <span class="at">prop =</span> <span class="fl">0.75</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>train_data <span class="ot">&lt;-</span> <span class="fu">training</span>(data_split)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>test_data  <span class="ot">&lt;-</span> <span class="fu">testing</span>(data_split)</span></code></pre></div>
+<p>Set up the recipe for pre-processing:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>recipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(heart_disease <span class="sc">~</span> ., <span class="at">data =</span> train_data) <span class="sc">%&gt;%</span> <span class="co"># Create a recipe object for data preprocessing</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">step_impute_median</span>(<span class="fu">all_numeric</span>(), <span class="sc">-</span><span class="fu">all_outcomes</span>()) <span class="sc">%&gt;%</span> <span class="co"># Replace missing values in numeric columns with median values</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal</span>(), <span class="sc">-</span><span class="fu">all_outcomes</span>(), <span class="at">keep_original_cols =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="co"># Convert categorical variables to dummy/indicator variables</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="fu">step_zv</span>(<span class="fu">all_predictors</span>()) <span class="sc">%&gt;%</span> <span class="co"># Remove constant or zero-variance predictors</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric</span>(), <span class="sc">-</span><span class="fu">all_outcomes</span>()) <span class="sc">%&gt;%</span><span class="co"># Normalize numeric variables</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="fu">step_integer</span>(<span class="fu">all_factor</span>()) <span class="co">#Convert factors to numerical</span></span></code></pre></div>
+<p>Process the training and testing sets with the recipe:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>train_processed <span class="ot">&lt;-</span> recipe <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="fu">prep</span>(train_data) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="fu">bake</span>(train_data)</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>test_processed <span class="ot">&lt;-</span> recipe <span class="sc">%&gt;%</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="fu">prep</span>(test_data) <span class="sc">%&gt;%</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="fu">bake</span>(test_data)</span></code></pre></div>
+<p>Creating workflow</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>glm_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">&quot;glm&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>wflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="fu">add_recipe</span>(recipe) <span class="sc">%&gt;%</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="fu">add_model</span>(glm_spec)</span></code></pre></div>
+<p>For processing multiple steps, it is often helpful to build a
+“workflow”, which is essentially a container object that combines the
+information required to fit and predict from a model. Steps such as
+recipes and models can be added to these workflows and then changes and
+iterations can be performed quickly.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>wflow</span></code></pre></div>
+<pre><code>══ Workflow ════════════════════════════════════════════════════════════════════
+Preprocessor: Recipe
+Model: linear_reg()
 
-Residuals:
-    Min      1Q  Median      3Q     Max 
--5.7121 -2.1122 -0.8854  1.5819  8.2360 
+── Preprocessor ────────────────────────────────────────────────────────────────
+5 Recipe Steps
+
+• step_impute_median()
+• step_dummy()
+• step_zv()
+• step_normalize()
+• step_integer()
+
+── Model ───────────────────────────────────────────────────────────────────────
+Linear Regression Model Specification (regression)
+
+Computational engine: glm </code></pre>
+<p>Let’s create a model fit using the training set:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>wflow_fit <span class="ot">&lt;-</span> wflow <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> train_processed)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>wflow_fit</span></code></pre></div>
+<pre><code>══ Workflow [trained] ══════════════════════════════════════════════════════════
+Preprocessor: Recipe
+Model: linear_reg()
+
+── Preprocessor ────────────────────────────────────────────────────────────────
+5 Recipe Steps
+
+• step_impute_median()
+• step_dummy()
+• step_zv()
+• step_normalize()
+• step_integer()
+
+── Model ───────────────────────────────────────────────────────────────────────
+
+Call:  stats::glm(formula = ..y ~ ., family = stats::gaussian, data = data)
 
 Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 30.09886    1.63392  18.421  &lt; 2e-16 ***
-hp          -0.06823    0.01012  -6.742 1.79e-07 ***
+(Intercept)          age          sex           cp     trestbps         chol  
+  1.4333537    0.0255838    0.0480375    0.0218823    0.0117592    0.0242067  
+        fbs      restecg      thalach    exangTRUE      oldpeak        slope  
+ -0.0300945   -0.0004369   -0.0039532    0.0906063   -0.0088317    0.0121415  
+         ca         thal        class    age_group  
+  0.0246346    0.0287299    0.3475282   -0.0168654  
+
+Degrees of Freedom: 221 Total (i.e. Null);  206 Residual
+Null Deviance:      55.21 
+Residual Deviance: 14.9     AIC: 64.24</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">summary</span>(wflow)</span></code></pre></div>
+<pre><code>        Length Class      Mode   
+pre     3      stage_pre  list   
+fit     2      stage_fit  list   
+post    1      stage_post list   
+trained 1      -none-     logical</code></pre>
+<p>Create different models for the dependent variable “heart
+disease”:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># create linear regression models</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co"># model 1</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>model_1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(heart_disease <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> age <span class="sc">+</span> sex <span class="sc">+</span> trestbps <span class="sc">+</span> chol <span class="sc">+</span> fbs <span class="sc">+</span> thalach, <span class="at">data =</span> train_processed, <span class="at">family =</span> binomial)</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="fu">summary</span>(model_1)</span></code></pre></div>
+<pre><code>
+Call:
+glm(formula = heart_disease == 1 ~ age + sex + trestbps + chol + 
+    fbs + thalach, family = binomial, data = train_processed)
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  2.73316    0.84296   3.242  0.00119 ** 
+age         -0.09177    0.18347  -0.500  0.61694    
+sex         -1.66776    0.38669  -4.313 1.61e-05 ***
+trestbps    -0.44680    0.17825  -2.507  0.01219 *  
+chol        -0.34484    0.16528  -2.086  0.03694 *  
+fbs          0.22228    0.45504   0.488  0.62520    
+thalach      1.00637    0.19941   5.047 4.49e-07 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
-Residual standard error: 3.863 on 30 degrees of freedom
-Multiple R-squared:  0.6024,    Adjusted R-squared:  0.5892 
-F-statistic: 45.46 on 1 and 30 DF,  p-value: 1.788e-07</code></pre>
-<p>Confidence interval for the coefficient</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">confint</span>(lm_model)</span></code></pre></div>
-<pre><code>                  2.5 %     97.5 %
-(Intercept) 26.76194879 33.4357723
-hp          -0.08889465 -0.0475619</code></pre>
-<p>Let’s create a scatterplot to visualize the relationship between mpg
-and horsepower.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(<span class="at">x =</span> hp, <span class="at">y =</span> mpg)) <span class="sc">+</span></span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Scatterplot of mpg vs. Horsepower&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Horsepower&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Miles per Gallon&quot;</span>)</span></code></pre></div>
-<p><img src="workshop_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
-<p>Anova table for the model</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">anova</span>(lm_model)</span></code></pre></div>
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 306.60  on 221  degrees of freedom
+Residual deviance: 238.24  on 215  degrees of freedom
+AIC: 252.24
+
+Number of Fisher Scoring iterations: 4</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># model 2</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>model_2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(heart_disease <span class="sc">==</span><span class="dv">1</span>  <span class="sc">~</span> age <span class="sc">+</span> sex <span class="sc">+</span> trestbps <span class="sc">+</span> chol <span class="sc">+</span> fbs <span class="sc">+</span> thalach <span class="sc">+</span> sex<span class="sc">*</span>age_group, <span class="at">data =</span> train_processed, <span class="at">family =</span> binomial)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="fu">summary</span>(model_2)</span></code></pre></div>
+<pre><code>
+Call:
+glm(formula = heart_disease == 1 ~ age + sex + trestbps + chol + 
+    fbs + thalach + sex * age_group, family = binomial, data = train_processed)
+
+Coefficients:
+              Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)     0.9830     2.0667   0.476   0.6343    
+age            -0.1384     0.2041  -0.678   0.4975    
+sex            -0.7520     1.0452  -0.719   0.4719    
+trestbps       -0.4527     0.1803  -2.511   0.0120 *  
+chol           -0.3395     0.1658  -2.047   0.0406 *  
+fbs             0.2838     0.4617   0.615   0.5387    
+thalach         1.0015     0.1994   5.024 5.07e-07 ***
+age_group       1.1817     1.2950   0.913   0.3615    
+sex:age_group  -0.6501     0.7020  -0.926   0.3544    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 306.60  on 221  degrees of freedom
+Residual deviance: 237.36  on 213  degrees of freedom
+AIC: 255.36
+
+Number of Fisher Scoring iterations: 5</code></pre>
+<p>Confidence interval for the coefficients:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">confint</span>(model_1)</span></code></pre></div>
+<pre><code>                 2.5 %      97.5 %
+(Intercept)  1.1260510  4.44765092
+age         -0.4533680  0.26904154
+sex         -2.4600800 -0.93731100
+trestbps    -0.8084249 -0.10545856
+chol        -0.6761778 -0.02471503
+fbs         -0.6635681  1.13208430
+thalach      0.6328536  1.41774787</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">confint</span>(model_2)</span></code></pre></div>
+<pre><code>                   2.5 %      97.5 %
+(Intercept)   -3.0656365  5.06959242
+age           -0.5482550  0.25567063
+sex           -2.8290306  1.28611327
+trestbps      -0.8189442 -0.10789545
+chol          -0.6717590 -0.01836043
+fbs           -0.6151356  1.20726994
+thalach        0.6277513  1.41245730
+age_group     -1.2730948  3.80233692
+sex:age_group -2.0615622  0.69592048</code></pre>
+<p>Create Anova table for the models:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">anova</span>(model_1)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Df"],"name":[1],"type":["int"],"align":["right"]},{"label":["Sum Sq"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Mean Sq"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["F value"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Pr(>F)"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"678.3729","3":"678.37287","4":"45.4598","5":"1.787835e-07","_rn_":"hp"},{"1":"30","2":"447.6743","3":"14.92248","4":"NA","5":"NA","_rn_":"Residuals"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Df"],"name":[1],"type":["int"],"align":["right"]},{"label":["Deviance"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Resid. Df"],"name":[3],"type":["int"],"align":["right"]},{"label":["Resid. Dev"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"NA","2":"NA","3":"221","4":"306.6032","_rn_":"NULL"},{"1":"1","2":"10.1286546","3":"220","4":"296.4745","_rn_":"age"},{"1":"1","2":"16.8390221","3":"219","4":"279.6355","_rn_":"sex"},{"1":"1","2":"5.0551449","3":"218","4":"274.5804","_rn_":"trestbps"},{"1":"1","2":"4.0718173","3":"217","4":"270.5086","_rn_":"chol"},{"1":"1","2":"0.4704565","3":"216","4":"270.0381","_rn_":"fbs"},{"1":"1","2":"31.7934144","3":"215","4":"238.2447","_rn_":"thalach"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">anova</span>(model_2)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Df"],"name":[1],"type":["int"],"align":["right"]},{"label":["Deviance"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Resid. Df"],"name":[3],"type":["int"],"align":["right"]},{"label":["Resid. Dev"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"NA","2":"NA","3":"221","4":"306.6032","_rn_":"NULL"},{"1":"1","2":"10.128654601","3":"220","4":"296.4745","_rn_":"age"},{"1":"1","2":"16.839022146","3":"219","4":"279.6355","_rn_":"sex"},{"1":"1","2":"5.055144929","3":"218","4":"274.5804","_rn_":"trestbps"},{"1":"1","2":"4.071817344","3":"217","4":"270.5086","_rn_":"chol"},{"1":"1","2":"0.470456545","3":"216","4":"270.0381","_rn_":"fbs"},{"1":"1","2":"31.793414411","3":"215","4":"238.2447","_rn_":"thalach"},{"1":"1","2":"0.007439218","3":"214","4":"238.2372","_rn_":"age_group"},{"1":"1","2":"0.877267089","3":"213","4":"237.3600","_rn_":"sex:age_group"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
