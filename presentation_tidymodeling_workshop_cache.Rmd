@@ -427,12 +427,6 @@ rec <- rec %>%
 # Preprocessed data summary
 summary(prepped <- prep(rec, training = mtcars))
 ```
----
-Demonstrates normalization, PCA, and dummy coding
-step_* functions for different transformations
-Easy reproduction and consistency in data analysis
-
-Note: Witness 'recipes' in its true element through this walkthrough. Here, we're taking the renowned 'mtcars' dataset and applying a series of transformations, all within the tidy, understandable structure that 'recipes' provides. Note how each 'step_*' function corresponds to a specific transformation, making your preprocessing steps modular, clear, and easy to adjust or reproduce. This hands-on example showcases the practical elegance of 'recipes' in data preprocessing.
 
 ## From Preprocessing to Modeling: A Seamless Journey
 
@@ -451,8 +445,7 @@ Note: Witness 'recipes' in its true element through this walkthrough. Here, we'r
 ![](path_to_workflow_visualization.png) <!--Replace with the path to your image-->
 
 
-Note: The true power of tidymodeling becomes evident in its holistic approach. It's not just about individual steps; it's the journey from raw data to insightful models, all within the same, consistent environment. One of tidymodeling's most compelling advantages is the ease of transition between stages of data analysis. It eliminates the disjointed processes often encountered in traditional methods, replacing them with a streamlined, intuitive workflow. And with its broad compatibility, tidymodeling ensures that you have the tools you need, regardless of your specific modeling or validation requirements.
-
+The power of tidymodeling becomes evident in its holistic approach. It's not just about individual steps; it's the journey from raw data to insightful models, all within the same, consistent environment. Tidymodeling eliminates the disjointed processes often encountered in traditional methods, replacing them with a streamlined, intuitive workflow. 
 
 ## Getting More Hands on 
 
