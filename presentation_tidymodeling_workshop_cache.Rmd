@@ -1,0 +1,502 @@
+---
+title: "Tidy Data Preprocessing in R"
+subtitle: "Workshop: How to get the most out of Tidymodeling with R"
+author: "Henry Baker (228755), Daniyar Imanaliev (238522), Isabella Urbano Trujillo (233239)"
+date: "October 30, 2023"
+output: 
+  ioslides_presentation:
+    widescreen: true
+    smaller: true
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(recipes)
+library(ggplot2)
+library(lattice)
+library(formatR)
+library(tidymodels)
+library(dplyr)
+```    
+
+## 
+
+<center>
+
+# *"To Tidymodel or not to Tidymodel, that is the question..."* <!-- .element: class="fragment" data-fragment-index="1" -->
+
+# - Hadley Wickam (probably) <!-- .element: class="fragment" data-fragment-index="2" -->
+
+---
+
+### Presented by 
+- Henry Baker (228755), 
+- Daniyar Imanaliev (238522), 
+- Isabella Urbano Trujillo (233239)
+
+<div style="text-align: center;">
+  <img src="pics/tidymodels_packages.jpg" style="max-height: 250px; opacity: 0.5;">
+</div>
+
+## Agenda
+
+1. **Modeling 101**
+2. **Why Tidymodeling? (Goodbye Base R)**
+3. **What is Tidymodeling?**
+4. **Key concepts in Tidymodeling**
+6. **Deep Dive": the Power of 'recipes'**
+7. **Interactive Coding Session**
+
+
+&nbsp;
+
+### This workshop focuses on Pre-processing with `recipes.
+### ...out of scope (but nonetheless important):
+
+- available models 
+- complex modeling
+- resampling for evaluating model performance
+- post processing in general (ease of which is a *major draw* for Tidymodeling)
+
+# Modeling 101 
+## How does modeling fit into the data analysis process?
+
+A non-linear, iterative process: 
+
+<div style="text-align: center;">
+  <img src="pics/data_process.png" style="max-height:300px;">
+</div>
+
+... this iteration between modeling, and preprocessing is what makes Tidymodels so powerful.
+
+3 Types of models: 
+- **Descriptive**, **Inferential**,  **Predictive** 
+
+
+# So, why Tidymodeling?
+## Problem Definition: Remember this?
+
+```{r, echo=FALSE}
+# non-visible 
+set.seed(123) 
+
+synthetic_data <- data.frame(
+  predictor1 = rnorm(100),  
+  predictor2 = rnorm(100),  
+  predictor3 = rnorm(100),  
+  control1 = sample(c("Yes", "No"), 100, replace = TRUE), 
+  control2 = runif(100), 
+  outcome = rnorm(100)  
+)
+
+synthetic_data$outcome <- with(synthetic_data, predictor1 + 2*predictor2 + rnorm(100))
+
+
+```
+
+```{r, echo=TRUE}
+model <- lm(outcome ~ predictor1 + predictor2 + predictor3 + control1 + control2, data=synthetic_data)
+summary(model)
+
+```
+
+## The Challenge with Base R's 'Formula'
+
+&nbsp;
+
+- **Inconsistent syntax across functions** - can’t swap in / out, to compare across models easily
+- Preprocessing a **separate data wrangling exercise** 
+- Preprocessing often involves a **mix of functions** and approaches 
+- **Lack of a standardized workflow**
+- Lack of standardized framework for evaluation & tuning hyperparameters
+- Outputs are ugly
+- Outputs not always a dataframe
+- Difficulties in maintaining and scaling analyses
+
+![](path_to_a_relevant_image.png) <!--Replace this with the path to your image-->
+
+And after all that, having **finally** run your model(s)...
+
+# ...what if you realized you’d been heading in the wrong direction all this time and wanted to run a *different* model...
+
+## Worse still, R’s strength is also its greatest weakness…
+
+One of the strengths of R is that it **encourages developers** to create a user interface that fits their needs. 
+
+On the one hand this means that R has an *immense* functionality which is continuously being added to by the community...
+
+... on the other hand, this means that R modeling is **unwieldy at best, incoherent at worst**.
+
+<div style="border:1px solid black; padding:10px; background-color:grey; color:white;"> 
+
+<h3 style="color:white;"> Plotting an example; exampling a plot: </h3> 
+
+What follows are **three common methods for creating a scatter plot of two numeric variables**. In each separate groups of developers devised three distinct interfaces for the same task. Each has advantages and disadvantages. Each is different!
+
+Keep in mind for comparison: in Python, when approaching a problem:
+
+<center> 
+
+*“There should be one – and preferably only one – obvious way to do it.”* - the Python Developer’s Guide
+
+</center>
+
+We hope this illustrates the problematic diversity of non-tidy modeling! </div>
+
+</center>
+
+<center>
+
+# 1) BASE R 
+```{r eval = F}
+plot(data$x, data$y, main="Base R Plot", pch=19, col=rgb(0.2,0.4,0.6,0.6))
+```
+
+</center>
+
+<center>
+
+# 2) LATTICE 
+```{r eval = F}
+xyplot(y ~ x, data = data, 
+                       main = "Scatter Plot with Lattice",
+                       xlab = "Independent", 
+                       ylab = "Dependent",
+                       col = "blue",
+                       pch = 16) 
+```
+
+</center>
+
+<center>
+
+# 3) GGPLOT 
+```{r eval = F}
+ggplot(data, aes(x = x, y = y)) + 
+  geom_point(color = 'blue') +
+  geom_smooth(method = 'lm', se = FALSE, color = 'red') + 
+  labs(
+    title = "Generated Scatter Plot with Smooth Line",
+    x = "Independent",
+    y = "Dependent"
+  ) +
+  theme_minimal()  
+
+```
+
+</center>
+
+# Introducing Tidymodeling: A Paradigm Shift
+
+## What is(/are) ‘Tidymodels’
+
+
+Tidymodels is a collection of R packages and a framework for modeling and machine learning that follows the principles of tidy data and integrates seamlessly with the tidyverse ecosystem. 
+
+
+It was developed to provide a consistent and organized way to perform machine learning tasks in R, making it easier for data scientists and analysts to build, evaluate, and deploy predictive models.
+
+&nbsp;
+
+
+<div style="text-align: center;">
+  <img src="pics/tidymodels_packages.jpg" style="max-height: 250px; opacity: 0.5;">
+  <p style="caption-side: bottom;"> The TidyModels universe, 
+  credit: tidymodels,org </p>
+</div>
+
+## Tidy Design
+
+
+- **Unifies** various modeling functions under a single roof
+- **Simplifies** the data **preprocessing pipeline**
+- Introduces a **consistent syntax** and workflow
+- Enhances **readability and maintenance** of code
+- Empowers both novice and experienced data scientists
+
+![](path_to_tidymodeling_benefits_image.png) <!--Replace with the path to your image-->
+
+*Transitioning from the world of scattered functions and inconsistent methodologies, tidymodeling simplifies your workflow but also introduces an elegance to data preprocessing.* 
+
+*With tidymodeling, you no longer need to be a 'jack of all trades' — the package suite  integrates essential tools, providing a cohesive experience.* 
+
+
+## Just as `Tidyverse` syntax > `Base R` expressions…
+
+- **Tidyverse integration**: Built on the principles of the tidyverse, promoting consistent and user-friendly data manipulation. Familiarity with the tidyverse makes using Tidymodels seamless and consistent in data analysis and modeling workflows.
+
+- **Consistency & workflow**: Tidymodels ensures a structured workflow for modeling, encapsulating data pre-processing, model specification, tuning, and evaluation, enhancing organization and transparency.
+
+- **Recipes for data pre-processing**: The inclusion of the `recipes` package in Tidymodels allows structured, reproducible data pre-processing steps, beneficial for feature engineering and data transformation.
+
+- **Model Agnosticism**: Facilitates easy swapping of different models for experimentation and selection without extensive code adjustments.
+
+- **Hyperparameter Tuning**: Streamlined process for adjusting and finding the best model parameters.
+
+- **Resampling & Cross-validation**: Offers resampling methods, like cross-validation and bootstrapping, essential for reliable estimations of model generalization.
+
+- **Extensive metrics**: The `yardstick` package in Tidymodels provides a broad spectrum of evaluation metrics, simplifying model performance comparison and assessment.
+
+
+
+# Key Concepts in Tidymodeling (I): Preprocessing with a 'Recipe'
+## Preprocessing with a 'Recipe'
+
+**Pre-processing** involves preparing the data for modeling. This includes tasks such as data splitting, feature engineering, and data transformation. 
+
+**A 'recipe'** prepares your data for fitting a model. It is a framework for getting your 'ingredients' (data) into shape for 'cooking' with (modeling). 
+
+&nbsp;
+
+Here we focus on 3 processes: 
+
+- Data splitting
+
+- Feature engineering
+
+- Assigning roles
+
+***  
+  
+### 1) Data Splitting with `rsample`
+
+&nbsp;
+
+
+- Crucial for assessing and tuning your models later on in the modeling process.
+- `rsample` splits your dataset into training, validation, and test sets.
+- Note: Evaluation and tuning models are out of scope for this workshop but are vital parts of the workflow.
+
+&nbsp;
+
+```{r eval = F}
+data_split <- initial_split(data, prop = 3/4) 
+train_data <- training(data_split)
+test_data <- testing(data_split)
+```
+
+&nbsp;
+
+How to 'spend your data' between training and testing with the proportion argument is up for debate, but we suggest around a 1:4 split as here.
+
+***
+
+### 2) Assigning "Roles" with `update_role()`: 
+
+&nbsp;
+
+- Optional step to assign roles - not an intrinsic part of the process
+- can be useful to assign "ID"n role to variables.
+- ID variables are not included in the model but are retained for investigation purposes later on (eg identifying outliers).
+
+&nbsp;
+
+```{r eval = F}
+hosp_rec <- 
+  recipe(patient_outcome ~ ., data = heart_cond_data) %>% 
+  update_role(patient, hospital, new_role = "ID") 
+
+```
+***
+
+### 3) Feature Engineering with `step_{}`: 
+
+Feature engineering involves several preprocessing steps essential for transforming your raw data into a format that is better suited for modeling. It involves creating or deriving new features from existing ones, selecting relevant features, and encoding data in ways that provide significant context or expose meaningful patterns.
+
+- **Feature extraction** eg deriving day of the week from a date variable; capturing seasonal trends.
+- **Normalization / Scale transformation:** Standardizes the range / taking the log.
+- **One-hot encoding/Dummy encoding:** Converts categorical variables into a series of binary columns (indicator variables)
+- **Handling missing values:** Techniques to handle missing data (e.g., imputation).
+- **Group transformations:** Applying a transformation to a group of variables together, preserving their relational information.
+
+```{r eval = F}
+hosp_rec <- 
+  recipe(patient_outcome ~ ., data = heart_cond_data) %>% 
+  update_role(patient, hospital, new_role = "ID") %>% 
+  step_date(date, features = c("dow", "month")) %>%               
+  step_holiday(date, 
+               holidays = timeDate::listHolidays("US"), 
+               keep_original_cols = FALSE) %>% 
+  step_dummy(all_nominal_predictors()) %>% 
+  step_zv(all_predictors())
+
+```
+
+# Key Concepts in Tidymodeling (II): Iterative Modeling
+
+## Iterative Modeling 
+
+### 1) Model Specification with `parsnip`: 
+
+Select (i) model, (ii) the specific 'engine' and (iii) any initial hyperpermaters
+```{r, eval = FALSE}
+lr_mod <- 
+	logistic_reg() %>%
+	 set_engine("glm")
+
+rf_mod <- 
+  rand_forest(trees = 1000) %>% 
+  set_engine("ranger") %>% 
+  set_mode("classification")
+```
+
+### 2) Bundle a `Workflow`: 
+`Workflows` are a framework structure that pair a `model` (above) and a `recipe `(from pre-processing) together.
+
+```{r, eval = FALSE}
+hosp_wflow <- 
+	workflow() %>% 
+	add_model(lr_mod) %>% 
+	add_recipe(hosp_rec) 
+```
+***
+### 3) Fit & Train model using `fit`:
+- `Fit` can be used to prepare the recipe and train the model from the resulting predictors
+- **NB:** fit on just the training data.
+
+```{r, eval = FALSE}
+hosp_fit <- 
+  hosp_wflow %>% 
+  fit(data = train_data)
+```
+
+This object has the finalized recipe and fitted model objects inside. 
+
+### 4) Use Trained Workflow to Predict:
+
+Next we would use the trained workflow (hosp_fit) to predict with the unseen test data.
+
+```{r, eval = FALSE}
+predict(hosp_fit, test_data)
+```
+`Predict()` applies the recipe to the new data, then passes them to the fitted model. We would then save this as an object and evaluate this prediction against the test data. 
+
+# Key Concepts in Tidymodeling (III): Post-Processing 
+
+## Post-Processing
+
+Post-processing involves selecting the best model configuration, and fine-tuning hyperparameters. 
+We have used the prefixes 'pre-' and 'post-' for clarity, but it should be understood these are all part of a non-linear process.
+
+Post-processing is outside the scope of this workshop, but at a very high level, it involves: 
+
+### 1) Evaluating / estimating performance, 
+- with `broom`: to tidy up model results, making them easier to interpret and visualize.
+- with `yardstick`: to calculate evaluation metrics like RMSE, MAE, or ROC AUC.
+- resampling methods, such as cross-validation folds can be created using 'vfold_cv'
+
+### 2) Hyperparameter Tuning 
+- with `tune` and `dials`: we can fine-tune model hyperparameters to optimize performance based on evaluation metrics.
+
+
+## Deep Dive: Harnessing the Power of `Recipes`
+
+- **What are 'recipes'?**
+  + A powerful specification for data pre-processing
+  + Enables creation of feature engineering steps
+  + Maintains a blueprint of the data transformation process
+
+- **Why 'recipes'?**
+  + Streamlines complex preprocessing tasks
+  + Ensures consistency in data preparation
+  + Facilitates easy reproduction of models
+
+- **Integration in Tidymodeling**
+  + Seamless interaction with other tidymodel packages
+  + Becomes a central component of the analysis pipeline
+
+![](path_to_recipes_visualization.png) <!--Replace with the path to your image-->
+
+# Recipes
+
+### 'Recipes' in Action: A Walkthrough
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+# Sample data
+data(mtcars)
+
+# Starting the recipe
+rec <- recipe(mpg ~ ., data = mtcars) 
+
+# Data preprocessing steps
+rec <- rec %>%
+  step_normalize(all_predictors()) %>%
+  step_pca(all_numeric()) %>%
+  step_dummy(all_nominal())
+
+# Preprocessed data summary
+summary(prepped <- prep(rec, training = mtcars))
+```
+
+## From Preprocessing to Modeling: A Seamless Journey
+
+- Tidymodeling: Not just preprocessing
+  + A unified framework for all stages of data analysis
+  + Modeling, validation, and interpretation within the same ecosystem
+
+- Transitioning with ease
+  + Direct passage from 'recipes' preprocessing to model input
+  + No need for manual data reshaping or reformatting
+
+- Compatibility and Flexibility
+  + Works with a range of model types (e.g., regression, classification)
+  + Accommodates various validation techniques
+
+![](path_to_workflow_visualization.png) <!--Replace with the path to your image-->
+
+
+The power of tidymodeling becomes evident in its holistic approach. It's not just about individual steps; it's the journey from raw data to insightful models, all within the same, consistent environment. Tidymodeling eliminates the disjointed processes often encountered in traditional methods, replacing them with a streamlined, intuitive workflow. 
+
+## Getting More Hands on 
+
+Install the complete tidymodeling package set with:
+
+```{r, eval = FALSE}
+install.packages("tidymodel")
+```
+
+Load the library:
+
+```{r, eval = FALSE}
+library(tidymodels)
+```
+
+### Exploring the packages:
+
+```{r tverse_pkgs}
+tidymodels_packages()
+```
+We see that we have actually loaded a number of packages (which could also be loaded individually). Core packages include; `recipe`, `parsnip`, `workflows`, `yardstick` etc.
+
+## Core functions within Tidymodels
+
+**`dials`:** has tools to create and manage values of tuning parameters.
+
+**`infer`:** is a modern approach to statistical inference.
+
+**`parsnip`**: is a tidy, unified interface to creating models.
+
+**`recipe`**: is a general data preprocessor with a modern interface. It can create model matrices that incorporate feature engineering, imputation, and other help tools.
+
+**`rsample`**: has infrastructure for resampling data so that models can be assessed and empirically validated.
+**`tune**: contains the functions to optimize model hyper-parameters.
+
+**`workflows`**: has methods to combine pre-processing steps and models into a single object.
+
+**`yardstick`**: contains tools for evaluating models (e.g.accuracy, RMSE, etc.).
+
+&nbsp;
+
+- See [here](https://www.tidymodels.org/find/) for a list of all tidymodels functions across different CRAN packages can be found at, or just in R directly:
+
+## To infinity & Beyond: onward reading...
+
+&nbsp;
+
+- [Tidymodels documentation](https://www.tidymodels.org/), a quick overview of the main packages, features and workflow
+
+&nbsp;
+
+- [Tidy Modeling with R Text Book](https://www.tmwr.org/), a comprehensive text book featuring extensive example using Ames Housing Data set by Max Kuhn & Julia Silge, 2023.
+]
+
