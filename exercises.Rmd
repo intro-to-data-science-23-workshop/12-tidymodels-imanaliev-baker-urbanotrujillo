@@ -1,0 +1,59 @@
+---
+title: "exercises"
+output: html_document
+date: "2023-10-27"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Let's use the penguins dataset from the palmerpenguins package:
+```{r, include = T, echo = F}
+# Load necessary packages
+library(palmerpenguins)
+library(tidymodels)
+library(ranger)
+
+# Load the "palmerpenguins" dataset
+data("penguins")
+
+# Subset the dataset to keep observations where "species" is "Adelie" or "Gentoo"
+subset_penguins <- penguins[penguins$species %in% c("Adelie", "Gentoo"), ]
+subset_penguins$species <- as.character(subset_penguins$species)
+subset_penguins$species <- as.factor(subset_penguins$species)
+```
+
+## Exercises with solutions
+
+# 1. Pre-processing
+```{r}
+# Create data splits
+
+
+# Define three different recipes
+
+
+# Pre-process the data using the recipe you like the most
+
+```
+
+# 2. Modeling
+```{r}
+# Define three model specifications
+
+# Create workflows
+
+# Fit the models
+
+```
+
+# 3. Post-processing
+```{r}
+# Make predictions
+
+# Evaluate the models (this can be done with yardstick too)
+
+# Compare the models
+
+```
