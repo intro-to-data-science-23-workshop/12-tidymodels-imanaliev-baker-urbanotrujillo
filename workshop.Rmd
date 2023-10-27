@@ -168,12 +168,12 @@ test_data  <- testing(data_split)
 
 Set up the recipe for pre-processing:
 ```{r}
-recipe <- recipe(heart_disease ~ ., data = train_data) %>% # Create a recipe object for data preprocessing
+recipe <- recipe(heart_disease ~ ., data = train_data) %>% # Create a recipe object for data pre-processing
   step_impute_median(all_numeric(), -all_outcomes()) %>% # Replace missing values in numeric columns with median values
   step_dummy(all_nominal(), -all_outcomes(), keep_original_cols = TRUE) %>% # Convert categorical variables to dummy/indicator variables
   step_zv(all_predictors()) %>% # Remove constant or zero-variance predictors
-  step_normalize(all_numeric(), -all_outcomes()) %>%# Normalize numeric variables
-  step_integer(all_factor()) #Convert factors to numerical
+  step_normalize(all_numeric(), -all_outcomes()) %>% # Normalize numeric variables
+  step_integer(all_factor()) # Convert factors to numerical
 ```
 
 Process the training and testing sets with the recipe:
@@ -201,7 +201,6 @@ For processing multiple steps, it is often helpful to build a "workflow", which 
 wflow
 ```
 Let's create a model fit using the training set:
-
 ```{r}
 wflow_fit <- wflow %>%
   fit(data = train_processed)
@@ -212,27 +211,4 @@ wflow_fit
 summary(wflow)
 ```
 
-Create different models for the dependent variable "heart disease":
-```{r}
-# create linear regression models
-
-# model 1
-model_1 <- glm(heart_disease == 1 ~ age + sex + trestbps + chol + fbs + thalach, data = train_processed, family = binomial)
-summary(model_1)
-
-# model 2
-model_2 <- glm(heart_disease ==1  ~ age + sex + trestbps + chol + fbs + thalach + sex*age_group, data = train_processed, family = binomial)
-summary(model_2)
-```
-Confidence interval for the coefficients:
-```{r}
-confint(model_1)
-confint(model_2)
-```
-
-Create Anova table for the models:
-```{r}
-anova(model_1)
-anova(model_2)
-```
 You can find more examples here: https://www.tidymodels.org/learn/ 

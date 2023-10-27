@@ -1,8 +1,8 @@
 ---
 title: "Tidy Data Preprocessing in R"
 subtitle: "Workshop: How to get the most out of Tidymodeling with R"
-author: "Henry Baker, Daniyar Imanaliev, Isabella Urbano Trujillo"
-date: "`r Sys.Date()`"
+author: "Daniyar Imanaliev, Henry Baker, Isabella Urbano Trujillo"
+date: "October 30, 2023"
 output: 
   ioslides_presentation:
     widescreen: true
@@ -18,6 +18,7 @@ library(tidymodels)
 library(dplyr)
 ```    
 
+
 ## 
 
 <center>
@@ -30,8 +31,8 @@ library(dplyr)
 ---
 
 ### Presented by 
-- Henry Baker,
-- Isabella Urbano-Trujillo, 
+- Henry Baker
+- Isabella Urbano Trujillo 
 - Daniyar Imanaliev
 
 <div style="text-align: center;">
@@ -117,7 +118,7 @@ summary(model)
 
 And after all that, having **finally** run your model(s)...
 
-# ...what if you realized you’d been heading in the wrong direction all this time and wanted to run a *different* model? ...you're in trouble!
+# ...what if you realized you’d been heading in the wrong direction all this time and wanted to run a *different* model...
 
 ## Worse still, R’s strength is also its greatest weakness…
 
@@ -131,7 +132,7 @@ On the one hand this means that R has an *immense* functionality which is contin
 
 <h3 style="color:white;"> Plotting an example; exampling a plot: </h3> 
 
-On the follow slides are **three common methods for creating a scatter plot of two numeric variables**. In each separate groups of developers devised three distinct interfaces for the same task. Each has advantages and disadvantages. Each is different!
+What follows are **three common methods for creating a scatter plot of two numeric variables**. In each separate groups of developers devised three distinct interfaces for the same task. Each has advantages and disadvantages. Each is different!
 
 Keep in mind for comparison: in Python, when approaching a problem:
 
@@ -286,7 +287,7 @@ How to 'spend your data' between training and testing with the proportion argume
 &nbsp;
 
 - Optional step to assign roles - not an intrinsic part of the process
-- can be useful to assign "ID" role to variables.
+- can be useful to assign "ID"n role to variables.
 - ID variables are not included in the model but are retained for investigation purposes later on (eg identifying outliers).
 
 &nbsp;
@@ -303,7 +304,7 @@ hosp_rec <-
 
 Feature engineering involves several preprocessing steps essential for transforming your raw data into a format that is better suited for modeling. It involves creating or deriving new features from existing ones, selecting relevant features, and encoding data in ways that provide significant context or expose meaningful patterns.
 
-- **Feature extraction** eg deriving day of the week from a date variable; capturing seasonal trends.
+- **Feature extraction** e.g. deriving the day of the week from a date variable; or capturing seasonal trends.
 - **Normalization / Scale transformation:** Standardizes the range / taking the log.
 - **One-hot encoding/Dummy encoding:** Converts categorical variables into a series of binary columns (indicator variables)
 - **Handling missing values:** Techniques to handle missing data (e.g., imputation).
@@ -428,24 +429,31 @@ rec <- rec %>%
 # Preprocessed data summary
 summary(prepped <- prep(rec, training = mtcars))
 ```
+---
+Demonstrates normalization, PCA, and dummy coding
+step_* functions for different transformations
+Easy reproduction and consistency in data analysis
+
+Note: Witness 'recipes' in its true element through this walkthrough. Here, we're taking the renowned 'mtcars' dataset and applying a series of transformations, all within the tidy, understandable structure that 'recipes' provides. Note how each 'step_*' function corresponds to a specific transformation, making your preprocessing steps modular, clear, and easy to adjust or reproduce. This hands-on example showcases the practical elegance of 'recipes' in data preprocessing.
 
 ## From Preprocessing to Modeling: A Seamless Journey
 
-- **Tidymodeling: Not just preprocessing**
+- Tidymodeling: Not just preprocessing
   + A unified framework for all stages of data analysis
   + Modeling, validation, and interpretation within the same ecosystem
 
-- **Transitioning with ease**
+- Transitioning with ease
   + Direct passage from 'recipes' preprocessing to model input
   + No need for manual data reshaping or reformatting
 
-- **Compatibility and Flexibility**
+- Compatibility and Flexibility
   + Works with a range of model types (e.g., regression, classification)
   + Accommodates various validation techniques
 
 ![](path_to_workflow_visualization.png) <!--Replace with the path to your image-->
 
-The power of tidymodeling becomes evident in its holistic approach. It's not just about individual steps; it's the journey from raw data to insightful models, all within the same, consistent environment. Tidymodeling eliminates the disjointed processes often encountered in traditional methods, replacing them with a streamlined, intuitive workflow.
+
+Note: The true power of tidymodeling becomes evident in its holistic approach. It's not just about individual steps; it's the journey from raw data to insightful models, all within the same, consistent environment. One of tidymodeling's most compelling advantages is the ease of transition between stages of data analysis. It eliminates the disjointed processes often encountered in traditional methods, replacing them with a streamlined, intuitive workflow. And with its broad compatibility, tidymodeling ensures that you have the tools you need, regardless of your specific modeling or validation requirements.
 
 
 ## Getting More Hands on 
@@ -499,5 +507,5 @@ We see that we have actually loaded a number of packages (which could also be lo
 &nbsp;
 
 - [Tidy Modeling with R Text Book](https://www.tmwr.org/), a comprehensive text book featuring extensive example using Ames Housing Data set by Max Kuhn & Julia Silge, 2023.
-
+]
 
