@@ -172,13 +172,13 @@ test_data  <- testing(data_split)
 
 Set up the enhanced recipe for preprocessing:
 ```{r}
-recipe <- recipe(class ~ ., data = train_data) %>% 
-  step_impute_median(all_numeric(), -all_outcomes()) %>% 
-  step_unknown(all_nominal(), -all_outcomes()) %>%
-  step_dummy(all_nominal(), -all_outcomes()) %>%
-  step_zv(all_predictors()) %>%
-  step_normalize(all_numeric(), -all_outcomes()) %>%
-  prep()
+recipe <- recipe(class ~ ., data = train_data) %>% # Create a recipe object for data preprocessing
+  step_impute_median(all_numeric(), -all_outcomes()) %>% # Replace missing values in numeric columns with median values
+  step_unknown(all_nominal(), -all_outcomes()) %>%# Handle unknown levels in categorical columns 
+  step_dummy(all_nominal(), -all_outcomes()) %>% # Convert categorical variables to dummy/indicator variables
+  step_zv(all_predictors()) %>% # Remove constant or zero-variance predictors
+  step_normalize(all_numeric(), -all_outcomes()) %>% # Normalize numeric variables  
+  prep() # Prepare the recipe
 ```
 
 Process the training and testing sets with the recipe:
@@ -189,7 +189,7 @@ test_processed  <- bake(recipe, new_data = test_data)
 
 #Creating a workflow 
 ```{r}
-lm_spec <- linear_reg() %>%
+glm_spec <- linear_reg() %>%
   set_engine("glm")
 
 wflow <- workflow() %>% 
@@ -197,6 +197,9 @@ wflow <- workflow() %>%
   add_model(glm_spec)
 ```
 
+```{r}
+
+```
 
 
 
