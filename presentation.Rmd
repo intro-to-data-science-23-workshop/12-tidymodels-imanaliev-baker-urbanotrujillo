@@ -302,7 +302,7 @@ hosp_rec <-
 
 Feature engineering involves several preprocessing steps essential for transforming your raw data into a format that is better suited for modeling. It involves creating or deriving new features from existing ones, selecting relevant features, and encoding data in ways that provide significant context or expose meaningful patterns.
 
-- **Feature extraction** e.g. deriving the day of the week from a date variable; or capturing seasonal trends.
+- **Feature extraction** eg deriving day of the week from a date variable; capturing seasonal trends.
 - **Normalization / Scale transformation:** Standardizes the range / taking the log.
 - **One-hot encoding/Dummy encoding:** Converts categorical variables into a series of binary columns (indicator variables)
 - **Handling missing values:** Techniques to handle missing data (e.g., imputation).
