@@ -519,6 +519,8 @@ the dataset heart from the kmed package which contains 14 variables of
 in: <a
 href="https://search.r-project.org/CRAN/refmans/kmed/html/heart.html"
 class="uri">https://search.r-project.org/CRAN/refmans/kmed/html/heart.html</a></p>
+<p>The data set is taken from machine learning repository of UCI.
+Reference: Lichman, M. (2013). UCI machine learning repository.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(kmed)</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> heart</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">head</span>(data)</span></code></pre></div>
@@ -550,7 +552,12 @@ class="uri">https://search.r-project.org/CRAN/refmans/kmed/html/heart.html</a></
          Mean   :0.6768           Mean   :0.9461  
          3rd Qu.:1.0000           3rd Qu.:2.0000  
          Max.   :3.0000           Max.   :4.0000  </code></pre>
-<p>Tranform dataset:</p>
+<p>Tranform dataset: Firstly, we need to create specific variable for
+heart disease with only two values based on class variable. Then, we
+need to transform values in heart_disease, sex and fbs (Fasting blood
+sugar more than 120 mg/dl) objects as factors, since it will be our
+predictors Thirdly, we need to transform age groups on three
+categories</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># create variable of heart disease</span></span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">heart_disease =</span> <span class="fu">ifelse</span>(class <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>), <span class="dv">1</span>, <span class="dv">0</span>))</span>
@@ -573,21 +580,70 @@ class="uri">https://search.r-project.org/CRAN/refmans/kmed/html/heart.html</a></
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>data_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(data, <span class="at">prop =</span> <span class="fl">0.75</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>train_data <span class="ot">&lt;-</span> <span class="fu">training</span>(data_split)</span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>test_data  <span class="ot">&lt;-</span> <span class="fu">testing</span>(data_split)</span></code></pre></div>
-<p>Set up the recipe for pre-processing:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>recipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(heart_disease <span class="sc">~</span> ., <span class="at">data =</span> train_data) <span class="sc">%&gt;%</span> <span class="co"># Create a recipe object for data preprocessing</span></span>
+<p>Set up the recipe for pre-processing: First of all, we create a
+recipe object that defines the data preprocessing steps. It specifies
+that you want to predict the “heart_disease” variable based on all other
+variables (indicated by heart_disease ~ .) using the data from the
+“train_data” dataset. 2) step_impute_median to replace missing values in
+numeric columns with the median value of that column. The all_numeric()
+function selects all numeric columns, and the -all_outcomes() function
+excludes the outcome variable (in this case, “heart_desease”) from the
+imputation. 3) This step uses step_dummy to convert categorical
+variables into dummy (or indicator) variables. It creates binary columns
+for each category in the original categorical variable. The
+all_nominal() function selects all nominal columns, and the
+-all_outcomes() function excludes the outcome variable from this step.
+Keep_original_cols allows to save original names of columns 4) This step
+uses step_zv to remove predictors (independent variables) that have
+constant or zero variance, as they don’t provide valuable information.
+The all_predictors() function selects all predictors for this step. 5)
+This step uses step_normalize to standardize (normalize) numeric
+variables to have a mean of 0 and a standard deviation of 1. It helps in
+ensuring that all numeric variables have the same scale. The
+all_numeric() function selects all numeric columns, and the
+-all_outcomes() function excludes the outcome variable from this step.
+6) Final step allow to convert factor to numerical</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>recipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(heart_disease <span class="sc">~</span> ., <span class="at">data =</span> train_data) <span class="sc">%&gt;%</span> <span class="co"># Create a recipe object for data pre-processing</span></span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">step_impute_median</span>(<span class="fu">all_numeric</span>(), <span class="sc">-</span><span class="fu">all_outcomes</span>()) <span class="sc">%&gt;%</span> <span class="co"># Replace missing values in numeric columns with median values</span></span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal</span>(), <span class="sc">-</span><span class="fu">all_outcomes</span>(), <span class="at">keep_original_cols =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="co"># Convert categorical variables to dummy/indicator variables</span></span>
 <span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="fu">step_zv</span>(<span class="fu">all_predictors</span>()) <span class="sc">%&gt;%</span> <span class="co"># Remove constant or zero-variance predictors</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric</span>(), <span class="sc">-</span><span class="fu">all_outcomes</span>()) <span class="sc">%&gt;%</span><span class="co"># Normalize numeric variables</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="fu">step_integer</span>(<span class="fu">all_factor</span>()) <span class="co">#Convert factors to numerical</span></span></code></pre></div>
-<p>Process the training and testing sets with the recipe:</p>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric</span>(), <span class="sc">-</span><span class="fu">all_outcomes</span>()) <span class="sc">%&gt;%</span> <span class="co"># Normalize numeric variables</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="fu">step_integer</span>(<span class="fu">all_factor</span>()) <span class="co"># Convert factors to numerical</span></span></code></pre></div>
+<p>Process the training and testing sets with the recipe: The “prep”
+function is typically used to prepare or preprocess the data according
+to the steps specified in the recipe object. The “bake” function is used
+to apply the recipe transformations to the training data. The result is
+a new dataset that has been processed according to the steps defined in
+the recipe.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>train_processed <span class="ot">&lt;-</span> recipe <span class="sc">%&gt;%</span></span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="fu">prep</span>(train_data) <span class="sc">%&gt;%</span></span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="fu">bake</span>(train_data)</span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>test_processed <span class="ot">&lt;-</span> recipe <span class="sc">%&gt;%</span></span>
 <span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="fu">prep</span>(test_data) <span class="sc">%&gt;%</span></span>
 <span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="fu">bake</span>(test_data)</span></code></pre></div>
-<p>Creating workflow</p>
+<p>Creating workflow linear_reg(): This function is used to create a
+specification for a linear regression model. It specifies that you want
+to build a linear regression model.</p>
+<p>set_engine(“glm”): This sets the modeling engine for the linear
+regression model. In this case, it specifies that the model should be
+implemented using the “glm” engine, which typically refers to the
+Generalized Linear Model engine available in R. This line effectively
+associates the “glm” engine with the linear regression model
+specification.</p>
+<p>The “workflow” function is used to create an empty workflow, which is
+a container for organizing the machine learning process. A workflow
+typically consists of data preprocessing (recipe) and model
+specification.</p>
+<p>The recipe object have been defined above and contains the data
+preprocessing steps, such as data transformations, scaling, and other
+data preparation steps. This step links the data preprocessing recipe to
+the workflow.</p>
+<p>“add_model” adds the linear regression model specification (glm_spec)
+to the workflow. The workflow will now use the specified linear
+regression model with the “glm” engine for modeling.</p>
+<p>To sum up, this code sets up a workflow for linear regression by
+specifying the model and its engine, and it associates this model with a
+data preprocessing recipe.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>glm_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">&quot;glm&quot;</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a></span>
@@ -618,6 +674,10 @@ Linear Regression Model Specification (regression)
 
 Computational engine: glm </code></pre>
 <p>Let’s create a model fit using the training set:</p>
+<p>We are fitting (training) the specified machine learning workflow
+with training data The result of this fitting process is stored in the
+wflow_fit object, which can be used for making predictions on new data
+or for further evaluation of the model’s performance.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>wflow_fit <span class="ot">&lt;-</span> wflow <span class="sc">%&gt;%</span></span>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> train_processed)</span>
 <span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>wflow_fit</span></code></pre></div>
@@ -649,6 +709,7 @@ Coefficients:
 Degrees of Freedom: 221 Total (i.e. Null);  206 Residual
 Null Deviance:      55.21 
 Residual Deviance: 14.9     AIC: 64.24</code></pre>
+<p>With summary function, we can show key metrics of our model</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">summary</span>(wflow)</span></code></pre></div>
 <pre><code>        Length Class      Mode   
 pre     3      stage_pre  list   
